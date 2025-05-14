@@ -44,5 +44,9 @@ jobs:
             DenonAvpControl_${{ github.event.inputs.release_version }}.zip
           tag:
             ${{ github.event.inputs.release_version }}
+
+      - name: Update repo.xml
+        run: |
+          sed -i -E "s/plugin[\s\S].+version=\"(\S.\S)\"/\1${{ github.event.inputs.release_version }}" repo.xml
           
           
