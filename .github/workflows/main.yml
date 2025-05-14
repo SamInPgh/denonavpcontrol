@@ -28,3 +28,9 @@ jobs:
         run: |            
           zip -r DenonAvpControl_${{ github.event.inputs.release_version }}.zip DenonAvpControl
           sha1sum DenonAvpControl_${{ github.event.inputs.release_version }}.zip
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          path:
+            DenonAvpControl_${{ github.event.inputs.release_version }}.zip                
