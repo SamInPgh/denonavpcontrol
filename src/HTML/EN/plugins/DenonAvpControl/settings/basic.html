@@ -1,0 +1,175 @@
+[% PROCESS settings/header.html %]
+
+	<input type="hidden" name="playername" value="[% playername %]">
+	<input type="hidden" name="mode" value="">
+
+	[% WRAPPER settingSection %]
+		<script type="text/javascript">
+			function checkType(val) {
+				var element1=document.getElementById('quickSelect');
+				var element2=document.getElementById('inputSource');
+				var element3=document.getElementById('zone');
+				var element4=document.getElementById('audioMenu');
+				if (val=='3') {
+					var event = new Event('change');
+					element1.value=0;
+					element1.disabled=1;
+					element1.dispatchEvent(event);
+					element2.style.display='inline';
+					element3.value=0;
+					element3.disabled=1;
+					element3.dispatchEvent(event);
+					element4.checked=0;
+					element4.disabled=1;
+				}
+				else {
+					element1.disabled=0;
+					element3.disabled=0;
+					element4.disabled=0;
+				}
+				checkAudioMenu(element4.checked);					
+			}
+			function checkSelect(val) {
+				var element=document.getElementById('inputSource');
+				if (val=='0')
+					element.style.display='inline';
+				else
+					element.style.display='none';
+			}
+			function checkAudioMenu(checked) {
+				var element1=document.getElementById('multiZone');
+				var element2=document.getElementById('speakers');
+				if (!checked)
+					element1.checked=0;
+				element1.disabled=!checked;
+				element2.disabled=!checked;
+			}
+			function checkPowerSynch(checked) {
+				var element1=document.getElementById('powerPoll');
+				var element2=document.getElementById('volSynch');
+				if (!checked) {
+					element1.value=60;
+					element2.checked=0;
+				}
+				element1.disabled=!checked;
+				element2.disabled=!checked;
+				checkVolSynch(element2.checked);
+			}
+			function checkVolSynch(checked) {
+				var element=document.getElementById('volPoll');
+				if (!checked)
+					element.value=0;
+				element.disabled=!checked;
+			}
+			window.onload = function () {
+				var val=document.getElementsByName("pref_Avp")[0].value;
+				checkType(val);
+				var val=document.getElementsByName("quickSelect")[0].value;
+				checkSelect(val);
+				var checked=document.getElementById("audioMenu").checked;
+				checkAudioMenu(checked);
+				var checked=document.getElementById("powerSynch").checked;
+				checkPowerSynch(checked);
+				var checked=document.getElementById("volSynch").checked;
+				checkVolSynch(checked);
+			}
+		</script>
+
+		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_ENABLED" desc="PLUGIN_DENONAVPCONTROL_ENABLED_DESC" %]
+			<input name="pref_Enabled" type="checkbox" [% IF prefs.pref_Enabled %] checked [% END %] />
+		[% END %]
+
+		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_AVP" desc="PLUGIN_DENONAVPCONTROL_AVP_DESC" %]
+        	       	<select name="[% pw.pref_prefix %]pref_Avp" id="avrType" onchange='checkType(this.value);' >
+                	       	<option value="0" [% IF prefs.pref_Avp == "0" %]selected[% END %]>Denon AVR</option>
+                	       	<option value="1" [% IF prefs.pref_Avp == "1" %]selected[% END %]>Denon AVP</option>
+                        	<option value="2" [% IF prefs.pref_Avp == "2" %]selected[% END %]>Marantz AVR</option>
+                        	<option value="3" [% IF prefs.pref_Avp == "3" %]selected[% END %]>Marantz MODEL M1 or Denon Home Amp</option>
+	               	</select>
+		[% END %]
+
+		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_AVPADDRESS" desc="PLUGIN_DENONAVPCONTROL_AVPADDRESS_DESC" %]
+			<input type="text" required placeholder="nnn.nnn.nnn.nnn[:ppppp]" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}(:[0-9]{1,5}){0,1}$" name="avpAddress" id="avpAddress" minlength="9" maxlength="21" value="[% prefs.avpAddress %]" size="21" />
+		[% END %]
+
+		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_QUICKSELECT" desc="PLUGIN_DENONAVPCONTROL_QUICKSELECT_DESC" %]
+       	       	<select name="[% pw.pref_prefix %]quickSelect" id="quickSelect" onchange='checkSelect(this.value);' >
+                	       	<option value="0" [% IF prefs.quickSelect == "0" %]selected[% END %]>[% "PLUGIN_DENONAVPCONTROL_INPUT" | string %]</option>
+                        	<option value="1" [% IF prefs.quickSelect == "1" %]selected[% END %]>[% "PLUGIN_DENONAVPCONTROL_QUICK1" | string %]</option>
+       	               	 	<option value="2" [% IF prefs.quickSelect == "2" %]selected[% END %]>[% "PLUGIN_DENONAVPCONTROL_QUICK2" | string %]</option>
+               	        	<option value="3" [% IF prefs.quickSelect == "3" %]selected[% END %]>[% "PLUGIN_DENONAVPCONTROL_QUICK3" | string %]</option>
+               	        	<option value="4" [% IF prefs.quickSelect == "4" %]selected[% END %]>[% "PLUGIN_DENONAVPCONTROL_QUICK4" | string %]</option>
+               	        	<option value="5" [% IF prefs.quickSelect == "5" %]selected[% END %]>[% "PLUGIN_DENONAVPCONTROL_QUICK5" | string %]</option>
+	            </select>
+				<input type="text" class="stdedit" name="inputSource" id="inputSource" value="[% prefs.inputSource %]" size="16" />
+		[% END %]
+
+		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_ZONE" desc="PLUGIN_DENONAVPCONTROL_ZONE_DESC" %]
+        	       	<select name="[% pw.pref_prefix %]zone" id="zone" >
+                	       	<option value="0" [% IF prefs.zone == "0" %]selected[% END %]>[% "PLUGIN_DENONAVPCONTROL_ZONE1" | string %]</option>
+                        	<option value="1" [% IF prefs.zone == "1" %]selected[% END %]>[% "PLUGIN_DENONAVPCONTROL_ZONE2" | string %]</option>
+       	               	 	<option value="2" [% IF prefs.zone == "2" %]selected[% END %]>[% "PLUGIN_DENONAVPCONTROL_ZONE3" | string %]</option>
+       	               	 	<option value="3" [% IF prefs.zone == "3" %]selected[% END %]>[% "PLUGIN_DENONAVPCONTROL_ZONE4" | string %]</option>
+	               	</select>
+		[% END %]
+		
+		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_POWERONPLAY" desc="PLUGIN_DENONAVPCONTROL_POWERONPLAY_DESC" %]
+			<input name="pref_PowerOnPlay" type="checkbox" [% IF prefs.pref_PowerOnPlay %] checked [% END %] />
+		[% END %]
+
+		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_QUICKDELAY" desc="PLUGIN_DENONAVPCONTROL_QUICKDELAY_DESC" %]
+			<input type="number" class="stdedit" name="delayQuick" id="delayQuick" min="0" max="60" value="[% prefs.delayQuick %]" />
+		[% END %]
+
+		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_MAXVOL" desc="PLUGIN_DENONAVPCONTROL_MAXVOL_DESC" %]
+        	       	<select name="[% pw.pref_prefix %]maxVol">
+                	       	<option value="10" [% IF prefs.maxVol == "10" %]selected[% END %]>OFF</option>
+                        	<option value="0" [% IF prefs.maxVol == "0" %]selected[% END %]>80 (0 dB)</option>
+       	               	 	<option value="-10" [% IF prefs.maxVol == "-10" %]selected[% END %]>70 (&minus;10 dB)</option>
+       	               	 	<option value="-20" [% IF prefs.maxVol == "-20" %]selected[% END %]>60 (&minus;20 dB)</option>
+	               	</select>
+		[% END %]
+
+		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_POWERSYNCH_ENABLED" desc="PLUGIN_DENONAVPCONTROL_POWERSYNCH_ENABLED_DESC" %]
+			<input name="pref_PowerSynch" id="powerSynch" type="checkbox" [% IF prefs.pref_PowerSynch %] checked [% END %] onchange='checkPowerSynch(this.checked);' >
+		[% END %]
+
+		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_POWERPOLL" desc="PLUGIN_DENONAVPCONTROL_POWERPOLL_DESC" %]
+			<input type="number" class="stdedit" name="powerPoll" id="powerPoll" min="5" max="60" value="[% prefs.powerPoll %]" />
+		[% END %]
+
+		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_VOLSYNCH_ENABLED" desc="PLUGIN_DENONAVPCONTROL_VOLSYNCH_ENABLED_DESC" %]
+			<input name="pref_VolSynch" id="volSynch" type="checkbox" [% IF prefs.pref_VolSynch %] checked [% END %] onchange='checkVolSynch(this.checked);' >
+		[% END %]
+
+		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_VOLPOLL" desc="PLUGIN_DENONAVPCONTROL_VOLPOLL_DESC" %]
+			<input type="number" class="stdedit" name="volPoll" id="volPoll" min="0" max="30" value="[% prefs.volPoll %]" />
+		[% END %]
+
+		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_AUDIOMENU_ENABLED" desc="PLUGIN_DENONAVPCONTROL_AUDIOMENU_ENABLED_DESC" %]
+			<input name="pref_AudioMenu" id="audioMenu" type="checkbox" [% IF prefs.pref_AudioMenu %] checked [% END %] onchange='checkAudioMenu(this.checked);'  >
+		[% END %]
+
+		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_MULTIZONE_ENABLED" desc="PLUGIN_DENONAVPCONTROL_MULTIZONE_ENABLED_DESC" %]
+			<input name="pref_MultiZone" id="multiZone" type="checkbox" [% IF prefs.pref_MultiZone %] checked [% END %] >
+		[% END %]
+
+		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_SPEAKERS" desc="PLUGIN_DENONAVPCONTROL_SPEAKERS_DESC" %]
+        	       	<select name="[% pw.pref_prefix %]speakers" id="speakers" >
+                	       	<option value="0" [% IF prefs.speakers == "0" %]selected[% END %]>3.1</option>
+                	       	<option value="1" [% IF prefs.speakers == "1" %]selected[% END %]>5.1</option>
+                        	<option value="2" [% IF prefs.speakers == "2" %]selected[% END %]>7.1 Front High</option>
+                        	<option value="3" [% IF prefs.speakers == "3" %]selected[% END %]>7.1 Front Wide</option>
+       	               	 	<option value="4" [% IF prefs.speakers == "4" %]selected[% END %]>7.1 Back</option>
+	               	</select>
+		[% END %]
+
+		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_SAVE" %]
+		[% END %]
+
+		<br><br><br>
+		<a href="https://github.com/aesculus/denonavpcontrol/wiki" target="_blank">[% "PLUGIN_DENONAVPCONTROL_WIKI" | string %]</a>
+
+	[% END %]
+
+[% PROCESS settings/footer.html %]

@@ -1,0 +1,665 @@
+# Strings for DENONAVPCONTROL
+PLUGIN_DENONAVPCONTROL
+	EN	DenonAvpAvrControl
+	DE	DenonAvpAvrControl
+	NL	DenonAvpAvrControl
+
+PLUGIN_DENONAVPCONTROL_MODULE_NAME
+	EN	Denon/Marantz AVR Control
+	DE	Denon/Marantz AVR Control
+	NL	Denon/Marantz AVR Control
+
+PLUGIN_DENONAVPCONTROL_DESCRIPTION
+	EN	This plugin allows a network-ready Denon or Marantz AVR connected to a Lyrion player to be controlled from any Lyrion client app via telnet. In addition to automatically turning the AVR on and off and changing/muting the volume, other AVR settings can be adjusted using a set of client menus.
+	DE	Mit diesem Plugin kann ein netzwerkfähiger Denon- oder Marantz-AVR, der mit einem Lyrion-Player verbunden ist, von jeder Lyrion-Client-App über Telnet gesteuert werden. Zusätzlich zum automatischen Ein- und Ausschalten des AVR und zum Ändern/Stummschalten der Lautstärke können weitere AVR-Einstellungen über eine Reihe von Client-Menüs angepasst werden.
+	NL	Met deze plug-in kan een netwerkklare Denon- of Marantz-AVR die is aangesloten op een Lyrion-speler worden bediend vanuit elke Lyrion-clientapp via telnet. Naast het automatisch in- en uitschakelen van de AVR en het wijzigen/dempen van het volume, kunnen andere AVR-instellingen worden aangepast met behulp van een reeks clientmenu's.
+
+PLUGIN_DENONAVPCONTROL_BASIC_SETTINGS_HEADER
+	EN	Changes made here effect the functionality of the AVR Control plugin.
+	DE	Änderungen hier betreffen die Funktionen des Plugins AVR Control
+	NL	Wijzigingen die hier worden aangebracht, hebben invloed op de functionaliteit van de AVR Control-plug-in.
+
+PLUGIN_DENONAVPCONTROL_SAVE
+	EN	You must restart the Lyrion Music Server if you change the 'Enable Plugin' checkbox and/or the AVR IP Address.
+	DE	Sie müssen den Lyrion Music Server neu starten, wenn Sie das Kontrollkästchen 'Plugin aktivieren' und/oder die AVR-IP-Adresse ändern.
+	NL	U moet de Lyrion Music Server opnieuw opstarten als u het selectievakje 'Enable Plugin' en/of het AVR IP-adres wijzigt.
+
+PLUGIN_DENONAVPCONTROL_WIKI
+	EN	Plugin Wiki
+	DE	Plugin Wiki
+	NL	Plugin Wiki
+
+PLUGIN_DENONAVPCONTROL_ENABLED
+	EN	Enable plugin?
+	DE	Plugin verwenden?
+	NL	Plug-in inschakelen?
+
+PLUGIN_DENONAVPCONTROL_ENABLED_DESC
+	EN	If you want to control the power, volume and muting of a connected AVR from the Lyrion player, check this box.
+	DE	Wenn Sie die Stromversorgung, Lautstärke und Stummschaltung eines angeschlossenen AVR vom Lyrion-Player aus steuern möchten, aktivieren Sie dieses Kontrollkästchen.
+	NL	Als u het vermogen, het volume en de demping van een aangesloten AVR vanaf de Lyrion-speler wilt regelen, vinkt u dit vakje aan.
+
+PLUGIN_DENONAVPCONTROL_POWERONPLAY
+	EN	Do not power AVR on until playback is started?
+	DE	AVR erst einschalten, wenn die Wiedergabe gestartet ist?
+	NL	AVR niet inschakelen voordat het afspelen is gestart?
+
+PLUGIN_DENONAVPCONTROL_POWERONPLAY_DESC
+	EN	Normally, the AVR is powered on when the player is turned on. Check this box if you want to delay powering it on until a playback command is received.
+	DE	Normalerweise wird der AVR eingeschaltet, wenn der Player eingeschaltet wird. Aktivieren Sie dieses Kontrollkästchen, wenn Sie das Einschalten verzögern möchten, bis ein Wiedergabebefehl empfangen wird.
+	NL	Normaal gesproken wordt de AVR ingeschakeld wanneer de speler wordt ingeschakeld. Selecteer dit vakje als u het inschakelen wilt uitstellen totdat een afspeelopdracht wordt ontvangen.
+
+PLUGIN_DENONAVPCONTROL_AUDIOMENU_ENABLED
+	EN	Enable audio settings menus?
+	DE	Menüs für Audioeinstellungen verwenden?
+	NL	Menu's voor audio-instellingen inschakelen?
+
+PLUGIN_DENONAVPCONTROL_AUDIOMENU_ENABLED_DESC
+	EN	If you want to be able to change various audio settings of the AVR during playback such as surround mode, room equalizer, dynamic equalizer, restorer and dynamic volume, check this box. This feature requires using the Squeezer (Android), iPeng (iOS) or Material Skin (LMS) client applicaton.
+	DE	Wenn Sie verschiedene Audioeinstellungen des AVR während der Wiedergabe ändern möchten, wie z. B. Surround-Modus, Raum-Equalizer, dynamischer Equalizer, Restorer und dynamische Lautstärke, aktivieren Sie dieses Kontrollkästchen. Für diese Funktion ist die Verwendung der Client-Anwendung Squeezer (Android), iPeng (iOS) oder Material Skin (LMS) erforderlich.
+	NL	Als u verschillende audio-instellingen van de AVR tijdens het afspelen wilt kunnen wijzigen, zoals surround-modus, kamer-equalizer, dynamische equalizer, hersteller en dynamisch volume, vinkt u dit vakje aan. Deze functie vereist het gebruik van de Squeezer (Android), iPeng (iOS) of Material Skin (LMS) client-applicatie.
+
+PLUGIN_DENONAVPCONTROL_MULTIZONE_ENABLED
+	EN	Enable multi-zone support?
+	DE	Mehrzonenunterstützung aktivieren?
+	NL	Ondersteuning voor meerdere zones inschakelen?
+
+PLUGIN_DENONAVPCONTROL_MULTIZONE_ENABLED_DESC
+	EN	If you want to have the ability to switch dynamically between AVR zones using the Audio Settings menu and control each zone's power and volume separately, check this box.
+	DE	Wenn Sie die Möglichkeit haben möchten, mithilfe des Menüs 'Audioeinstellungen' dynamisch zwischen AVR-Zonen zu wechseln und die Leistung und Lautstärke jeder Zone separat zu steuern, aktivieren Sie dieses Kontrollkästchen.
+	NL	Als u dynamisch wilt kunnen schakelen tussen AVR-zones via het menu Audio-instellingen en voor elke zone afzonderlijk het vermogen en volume wilt kunnen regelen, vinkt u dit vakje aan.
+
+PLUGIN_DENONAVPCONTROL_POWERSYNCH_ENABLED
+	EN	Enable syncing the power?
+	DE	Synchronisierung der Stromversorgung aktivieren?
+	NL	Synchronisatie van de voeding inschakelen?
+	
+PLUGIN_DENONAVPCONTROL_POWERSYNCH_ENABLED_DESC
+	EN	If you want to poll the AVR's power status at regular intervals to keep the player and AVR synchronized, check this box and enter the desired polling interval below.
+	DE	Wenn Sie den Stromstatus des AVR in regelmäßigen Abständen abfragen möchten, um die Synchronisierung von Player und AVR sicherzustellen, aktivieren Sie dieses Kontrollkästchen und geben Sie unten das gewünschte Abfrageintervall ein.
+	NL	Als u met regelmatige tussenpozen de stroomstatus van de AVR wilt opvragen om de speler en de AVR gesynchroniseerd te houden, vinkt u dit vakje aan en voert u hieronder het gewenste opvraaginterval in.
+
+PLUGIN_DENONAVPCONTROL_POWERPOLL
+	EN	Polling interval for power synchronization
+	DE	Abfrageintervall für die Stromsynchronisierung
+	NL	Pollinginterval voor vermogenssynchronisatie
+
+PLUGIN_DENONAVPCONTROL_POWERPOLL_DESC
+	EN	Enter the polling interval in seconds for power synchronization. The valid range is 5 to 60 seconds.
+	DE	Geben Sie das Abfrageintervall für die Stromsynchronisierung in Sekunden ein. Der gültige Bereich liegt zwischen 5 und 60 Sekunden.
+	NL	Voer het pollinginterval in seconden in voor stroomsynchronisatie. Het geldige bereik is 5 tot 60 seconden.
+	
+PLUGIN_DENONAVPCONTROL_VOLSYNCH_ENABLED
+	EN	Enable syncing the volume?
+	DE	Lautstärkensynchronisation einschalten?
+	NL	Synchronisatie van het volume inschakelen?
+
+PLUGIN_DENONAVPCONTROL_VOLSYNCH_ENABLED_DESC
+	EN	If you want to synchronize the player's volume to the AVR volume at each track change, and optionally at regular intervals, enable this checkbox.  This will cause volume changes on the AVR to change the player's volume indicator. Note: This option requires power syncing to be enabled.
+	DE	Wenn Sie die Lautstärke des Players bei jedem Titelwechsel und optional in regelmäßigen Abständen mit der Lautstärke des AVR synchronisieren möchten, aktivieren Sie dieses Kontrollkästchen. Dadurch ändern sich Lautstärkeänderungen am AVR auch in der Lautstärkeanzeige des Players. Hinweis: Diese Option erfordert die Aktivierung der Stromsynchronisierung.
+	NL	Als u het volume van de speler wilt synchroniseren met het AVR-volume bij elke trackwisseling, en optioneel met regelmatige tussenpozen, schakelt u dit selectievakje in. Hierdoor veranderen volumeveranderingen op de AVR de volume-indicator van de speler. Let op: voor deze optie moet stroomsynchronisatie ingeschakeld zijn.
+
+PLUGIN_DENONAVPCONTROL_VOLPOLL
+	EN	Polling interval for volume synchronization
+	DE	Abfrageintervall für die Volume-Synchronisierung
+	NL	Pollinginterval voor volumesynchronisatie
+
+PLUGIN_DENONAVPCONTROL_VOLPOLL_DESC
+	EN	Enter the polling interval in seconds for volume synchronization. The valid range is 0 (off) to 30 seconds.
+	DE	Geben Sie das Abfrageintervall für die Volumesynchronisierung in Sekunden ein. Der gültige Bereich liegt zwischen 0 (aus) und 30 Sekunden.
+	NL	Voer het pollinginterval in seconden in voor volumesynchronisatie. Het geldige bereik is 0 (uit) tot 30 seconden.
+
+PLUGIN_DENONAVPCONTROL_INPUT
+	EN	AVR Input Source
+	DE	AVR-Eingangsquelle
+	NL	AVR-invoerbron
+
+PLUGIN_DENONAVPCONTROL_QUICK1
+	EN	Quick Select 1
+	DE	Quick Select 1
+	NL	Quick Select 1
+
+PLUGIN_DENONAVPCONTROL_QUICK2
+	EN	Quick Select 2
+	DE	Quick Select 2
+	NL	Quick Select 2
+
+PLUGIN_DENONAVPCONTROL_QUICK3
+	EN	Quick Select 3
+	DE	Quick Select 3
+	NL	Quick Select 3
+
+PLUGIN_DENONAVPCONTROL_QUICK4
+	EN	Quick Select 4
+	DE	Quick Select 4
+	NL	Quick Select 4
+
+PLUGIN_DENONAVPCONTROL_QUICK5
+	EN	Quick Select 5
+	DE	Quick Select 5
+	NL	Quick Select 5
+
+PLUGIN_DENONAVPCONTROL_QUICKSELECT
+	EN	Input Select Option
+	DE	Eingabeauswahloption
+	NL	Optie voor invoerselectie
+
+PLUGIN_DENONAVPCONTROL_QUICKSELECT_DESC
+	EN	Select which Quick Select (Denon), Smart Select (Marantz) or Input Source you would like to switch to when the player is turned on. For the Marantz MODEL M1 and Denon Home Amp, the valid input sources are 'Digital', 'Line' and 'HDMI'.
+	DE	Wählen Sie aus, zu welcher Quick Select- (Denon), Smart Select- (Marantz) oder Eingangsquelle Sie wechseln möchten, wenn der Player eingeschaltet wird. Für Marantz MODEL M1 und Denon Home Amp sind die gültigen Eingangsquellen „Digital“, „Line“ und „HDMI“.
+	NL	Selecteer naar welke Quick Select (Denon), Smart Select (Marantz) of ingangsbron u wilt overschakelen wanneer de speler wordt ingeschakeld. Voor de Marantz MODEL M1 en Denon Home Amp zijn de geldige ingangsbronnen 'Digitaal', 'Lijn' en 'HDMI'.
+
+PLUGIN_DENONAVPCONTROL_ZONE1
+	EN	Main
+	DE	Hauptzone
+	NL	Hoofdzone
+
+PLUGIN_DENONAVPCONTROL_ZONE2
+	EN	Zone 2
+	DE	Zone 2
+	NL	Zone 2
+
+PLUGIN_DENONAVPCONTROL_ZONE3
+	EN	Zone 3
+	DE	Zone 3
+	NL	Zone 3
+
+PLUGIN_DENONAVPCONTROL_ZONE4
+	EN	Zone 4
+	DE	Zone 4
+	NL	Zone 4
+
+PLUGIN_DENONAVPCONTROL_ZONE
+	EN	Zone Option
+	DE	Zonenauswahl
+	NL	Zone Optie
+
+PLUGIN_DENONAVPCONTROL_ZONE_DESC
+	EN	Select which zone you would like the AVR to control.
+	DE	Wählen Sie aus, welche Zone der AVR steuern soll.
+	NL	Selecteer welke zone u wilt dat de AVR bedient.
+
+PLUGIN_DENONAVPCONTROL_AVPADDRESS
+	EN	IP Address of Denon/Marantz AVR
+	DE	IP-Adresse des Denon/Marantz AVR
+	NL	IP Address van de Denon/Marantz AVR
+
+PLUGIN_DENONAVPCONTROL_AVPADDRESS_DESC
+	EN	Enter the IP Address of the AVR (and optional port number if using a network bridge). Note that this plugin only works with fixed IP addresses.
+	DE	Geben Sie die IP-Adresse des AVR (und optional die Portnummer bei Verwendung einer Netzwerkbrücke) ein. Achtung: Dieses Plugin funktioniert nur mit festen IP-Adressen.
+	NL	Voer het IP-adres van de AVR in (en optioneel poortnummer als u een netwerkbrug gebruikt). Merk op dat deze plug-in alleen werkt voor vaste IP-adressen.
+
+PLUGIN_DENONAVPCONTROL_ONDELAY
+	EN	Delay to turn AVR on
+	DE	Verzögerung beim Einschalten des AVR
+	NL	Vertraging om AVR in te schakelen
+
+PLUGIN_DENONAVPCONTROL_ONDELAY_DESC
+	EN	Enter the number of seconds you want to wait after the player is turned on before the AVR is activated.
+	DE	Geben Sie die Anzahl der Sekunden ein, die Sie nach dem Einschalten des Players warten möchten, bevor der AVR aktiviert wird.
+	NL	Voer het aantal seconden in dat u wilt wachten nadat de speler is ingeschakeld voordat de AVR wordt geactiveerd.
+
+PLUGIN_DENONAVPCONTROL_OFFDELAY
+	EN	Delay to put AVR in Standby
+	DE	Verzögerung, bevor der AVR in den Standby-Modus geschaltet wird.
+	NL	Vertraging om AVR in stand-by te zetten
+
+PLUGIN_DENONAVPCONTROL_OFFDELAY_DESC
+	EN	Enter the number of seconds you want to wait after the player is turned off before the AVR is placed in Standby.
+	DE	Geben Sie die Anzahl der Sekunden ein, die Sie nach dem Ausschalten des Players warten möchten, bevor der AVR in den Standby-Modus versetzt wird.
+	NL	Voer het aantal seconden in dat u wilt wachten nadat de speler is uitgeschakeld voordat de AVR in stand-by wordt gezet.
+
+PLUGIN_DENONAVPCONTROL_QUICKDELAY
+	EN	Delay to set the Input Select Option
+	DE	Verzögerung zum Einstellen der Eingangsauswahloption
+	NL	Vertraging om de ingangsselectieoptie in te stellen
+
+PLUGIN_DENONAVPCONTROL_QUICKDELAY_DESC
+	EN	Enter the number of seconds to wait after the AVR is turned on before the Input Select Option is activated. Increase this value if playback is consistently missing the beginning of the first track.
+	DE	Geben Sie die Anzahl der Sekunden ein, die nach dem Einschalten des AVR gewartet werden soll, bevor die Eingangsauswahloption aktiviert wird. Erhöhen Sie diesen Wert, wenn bei der Wiedergabe ständig der Anfang des ersten Titels fehlt.
+	NL	Voer het aantal seconden in dat moet worden gewacht nadat de AVR is ingeschakeld voordat de Input Select Option wordt geactiveerd. Verhoog deze waarde als de weergave consequent het begin van de eerste track mist.
+
+PLUGIN_DENONAVPCONTROL_MAXVOL
+	EN	Maximum volume of AVR
+	DE	Maximale Lautstärke des AVR
+	NL	Maximum volume van de AVR
+
+PLUGIN_DENONAVPCONTROL_MAXVOL_DESC
+	EN	Select the maximum volume you want the plugin to set the AVR to when making volume adjustments.  100% volume at the player will be limited to this value on the AVR.
+	DE	Wählen Sie die maximale Lautstärke aus, auf die das Plugin den AVR einstellen soll, wenn Lautstärkeanpassungen vorgenommen werden. Die 100 % Lautstärke am Player wird am AVR auf diesen Wert begrenzt.
+	NL	Selecteer het maximale volume waarop u wilt dat de plug-in de AVR instelt bij het maken van volumeaanpassingen. 100% volume op de speler is beperkt tot deze waarde op de AVR.
+
+PLUGIN_DENONAVPCONTROL_AVP
+	EN	AVP/AVR Type
+	DE	AVP/AVR Art
+	NL	AVP/AVR Type
+
+PLUGIN_DENONAVPCONTROL_AVP_DESC
+	EN	Select the type of device being controlled by this player. The default is 'Denon AVR'.
+	DE	Wählen Sie den Gerätetyp aus, der von diesem Player gesteuert wird. Die Voreinstellung ist 'Denon AVR'.
+	NL	Selecteer het type apparaat dat door deze speler wordt bestuurd. De standaard is 'Denon AVR'.
+
+PLUGIN_DENONAVPCONTROL_AUDIO0
+	EN	Preamp Volume
+	DE	Vorverstärker Lautstärke
+	NL	Voorversterker Volume
+
+PLUGIN_DENONAVPCONTROL_AUDIO1
+	EN	Surround Mode
+	DE	Surround Modus
+	NL	Surround Modus
+
+PLUGIN_DENONAVPCONTROL_AUDIO2
+	EN	Room Equalizer
+	DE	Raumkorrektur Equalizer
+	NL	Kamer Equalizer
+
+PLUGIN_DENONAVPCONTROL_AUDIO3
+	EN	Dynamic Equalizer
+	DE	Dynamischer Equalizer
+	NL	Dynamic Equalizer
+
+PLUGIN_DENONAVPCONTROL_AUDIO4
+	EN	Dynamic Volume
+	DE	Dynamische Lautstärke
+	NL	Dynamic Volume
+
+PLUGIN_DENONAVPCONTROL_AUDIO5
+	EN	Audio Restorer
+	DE	Audio Restorer
+	NL	Audio Restorer
+
+PLUGIN_DENONAVPCONTROL_AUDIO6
+	EN	Reference Level Offset
+	DE	Referenzpegeloffset
+	NL	Referentieniveau Offset
+
+PLUGIN_DENONAVPCONTROL_AUDIO7
+	EN	Subwoofer On/Off
+	DE	Subwoofer ein / aus
+	NL	Subwoofer aan / uit
+
+PLUGIN_DENONAVPCONTROL_AUDIO8
+	EN	Channel Level Adjustment
+	DE	Kanalpegeleinstellung
+	NL	Kanaalniveau-aanpassin
+
+PLUGIN_DENONAVPCONTROL_AUDIO9
+	EN	Quick Select
+	DE	Quick Select
+	NL	Quick Select
+
+PLUGIN_DENONAVPCONTROL_AUDIO10
+	EN	Input Source Select
+	DE	Auswahl der Eingangsquelle
+	NL	Selectie ingangsbron
+
+PLUGIN_DENONAVPCONTROL_AUDIO11
+	EN	Zone Select
+	DE	Zone auswählen
+	NL	Zone selecteren
+
+PLUGIN_DENONAVPCONTROL_SURMD1
+	EN	Direct
+	DE	Direct-Modus
+	NL	Direct-Modus
+
+PLUGIN_DENONAVPCONTROL_SURMD2
+	EN	Pure Direct
+	DE	Pure-Direct-Modus
+	NL	Pure-Direct-Modus
+
+PLUGIN_DENONAVPCONTROL_SURMD3
+	EN	Stereo
+	DE	Stereo
+	NL	Stereo
+
+PLUGIN_DENONAVPCONTROL_SURMD4
+	EN	Standard
+	DE	Standard
+	NL	Standard
+
+PLUGIN_DENONAVPCONTROL_SURMD5
+	EN	Dolby Digital
+	DE	Dolby Digital
+	NL	Dolby Digital
+
+PLUGIN_DENONAVPCONTROL_SURMD6
+	EN	DTS Surround
+	DE	DTS Surround
+	NL	DTS Surround
+
+PLUGIN_DENONAVPCONTROL_SURMD7
+	EN	Wide Screen
+	DE	Wide Screen
+	NL	Breedbeeld
+
+PLUGIN_DENONAVPCONTROL_SURMD8
+	EN	5/7 Channel Stereo
+	DE	5/7 Kanal Stereo
+	NL	5/7 Kanalen Stereo
+
+PLUGIN_DENONAVPCONTROL_SURMD9
+	EN	Super Stadium
+	DE	Super Stadium
+	NL	Super Stadium
+
+PLUGIN_DENONAVPCONTROL_SURMD10
+	EN	Rock Arena
+	DE	Rock Arena
+	NL	Rock Arena
+
+PLUGIN_DENONAVPCONTROL_SURMD11
+	EN	Jazz Club
+	DE	Jazz Club
+	NL	Jazz Club
+
+PLUGIN_DENONAVPCONTROL_SURMD12
+	EN	Classic Concert
+	DE	Classic Konzert
+	NL	Classic Concert
+
+PLUGIN_DENONAVPCONTROL_SURMD13
+	EN	Mono Movie
+	DE	Mono Film
+	NL	Mono Film
+
+PLUGIN_DENONAVPCONTROL_SURMD14
+	EN	Matrix
+	DE	Matrix
+	NL	Matrix
+
+PLUGIN_DENONAVPCONTROL_SURMD15
+	EN	Video Game
+	DE	Videospiel
+	NL	Videospel
+
+PLUGIN_DENONAVPCONTROL_SURMDR1
+	EN	Direct
+	DE	Direct-Modus
+	NL	Direct-Modus
+
+PLUGIN_DENONAVPCONTROL_SURMDR2
+	EN	Pure Direct
+	DE	Pure-Direct-Modus
+	NL	Pure-Direct-Modus
+
+PLUGIN_DENONAVPCONTROL_SURMDR3
+	EN	Stereo
+	DE	Stereo
+	NL	Stereo
+
+PLUGIN_DENONAVPCONTROL_SURMDR4
+	EN	Dolby Surround
+	DE	Dolby Surround
+	NL	Dolby Surround
+
+PLUGIN_DENONAVPCONTROL_SURMDR5
+	EN	DTS Surround
+	DE	DTS Surround
+	NL	DTS Surround
+
+PLUGIN_DENONAVPCONTROL_SURMDR6
+	EN	Multichannel Stereo
+	DE	Mehrkanal-Stereo
+	NL	Meerkanaals stereo
+
+PLUGIN_DENONAVPCONTROL_SURMDR7
+	EN	Rock Arena
+	DE	Rock Arena
+	NL	Rock Arena
+
+PLUGIN_DENONAVPCONTROL_SURMDR8
+	EN	Jazz Club
+	DE	Jazz Club
+	NL	Jazz Club
+
+PLUGIN_DENONAVPCONTROL_SURMDR9
+	EN	Mono Movie
+	DE	Mono Film
+	NL	Mono Film
+
+PLUGIN_DENONAVPCONTROL_SURMDR10
+	EN	Matrix
+	DE	Matrix
+	NL	Matrix
+
+PLUGIN_DENONAVPCONTROL_SURMDR11
+	EN	Video Game
+	DE	Videospiel
+	NL	Videospel
+
+PLUGIN_DENONAVPCONTROL_SURMDR12
+	EN	Switch DTS/Dolby modes 
+	DE	Umschalten zwischen DTS/Dolby-Modi
+	NL	Schakel DTS/Dolby-modi
+
+PLUGIN_DENONAVPCONTROL_RMEQ1
+	EN	Audyssey
+	DE	Audyssey
+	NL	Audyssey
+
+PLUGIN_DENONAVPCONTROL_RMEQ2
+	EN	Audyssey Bypass L/R
+	DE	Audyssey Bypass L/R
+	NL	Audyssey Bypass L/R
+
+PLUGIN_DENONAVPCONTROL_RMEQ3
+	EN	Audyssey Flat
+	DE	Audyssey Flat
+	NL	Audyssey Flat
+
+PLUGIN_DENONAVPCONTROL_RMEQ4
+	EN	Manual
+	DE	Manuell
+	NL	Manueel
+
+PLUGIN_DENONAVPCONTROL_RMEQ5
+	EN	Off
+	DE	Aus
+	NL	Uit
+
+PLUGIN_DENONAVPCONTROL_NIGHT1
+	EN	Dynamic Vol. Setting = Midnight
+	DE	Dynamische Laustärke = Mitternacht
+	NL	Dynamisch volume. Instelling = Middernacht
+
+PLUGIN_DENONAVPCONTROL_NIGHT2
+	EN	Dynamic Vol. Setting = Evening
+	DE	Dynamische Lautstärke = Abend
+	NL	Dynamisch volume. Instelling = Avond
+
+PLUGIN_DENONAVPCONTROL_NIGHT3
+	EN	Dynamic Vol. Setting = Day
+	DE	Dynamische Lautstärke = Tag
+	NL	Dynamisch volume. Instelling = Dag
+
+PLUGIN_DENONAVPCONTROL_NIGHT_MSG
+	EN	This feature is only available when dynamic volume is set.
+	DE	Diese Funktion ist verfügbar, wenn die dynamische Lautstärke eingestellt ist.
+	NL	Deze functie is beschikbaar wanneer het dynamische volume is ingesteld.
+
+PLUGIN_DENONAVPCONTROL_REST1
+	EN	Restorer Off
+	DE	Restorer Aus
+	NL	Restorer Uit
+
+PLUGIN_DENONAVPCONTROL_REST2
+	EN	High
+	DE	Hoch
+	NL	Hoog
+
+PLUGIN_DENONAVPCONTROL_REST3
+	EN	Medium
+	DE	Mittel
+	NL	Medium
+
+PLUGIN_DENONAVPCONTROL_REST4
+	EN	Low
+	DE	Niedrig
+	NL	Laag
+
+PLUGIN_DENONAVPCONTROL_DYNVOL1
+	EN	Dynamic EQ and Volume Off
+	DE	Dynamischer EQ und -Lautstärke Aus
+	NL	Dynamische EQ en volume uit
+
+PLUGIN_DENONAVPCONTROL_DYNVOL2
+	EN	Dynamic EQ On
+	DE	Dynamischer EQ Ein
+	NL	Dynamische EQ Aan
+
+PLUGIN_DENONAVPCONTROL_DYNVOL3
+	EN	Dynamic EQ and Volume On
+	DE	Dynamischer EQ und -Laustärke Ein
+	NL	Dynamische EQ en volume aan
+
+PLUGIN_DENONAVPCONTROL_REF_LEVEL0
+	EN	Reference Level Offset=0db
+	DE	Referenzpegeloffset=0db
+	NL	Offset referentieniveau = 0db
+
+PLUGIN_DENONAVPCONTROL_REF_LEVEL5
+	EN	Reference Level Offset=5db
+	DE	Referenzpegeloffset=5db
+	NL	Referentieniveau Offset = 5db
+
+PLUGIN_DENONAVPCONTROL_REF_LEVEL10
+	EN	Reference Level Offset=10db
+	DE	Referenzpegeloffset=10db
+	NL	Referentieniveau Offset = 10db
+
+PLUGIN_DENONAVPCONTROL_REF_LEVEL15
+	EN	Reference Level Offset=15db
+	DE	Referenzpegeloffset=15db
+	NL	Referentieniveau Offset = 15db
+
+PLUGIN_DENONAVPCONTROL_REF_LEVEL_MSG
+	EN	This option is only available when dynamic equalizer is on.
+	DE	Diese Option ist nur verfügbar, wenn der dynamische Equalizer aktiviert ist.
+	NL	Deze optie is alleen beschikbaar als de dynamische equalizer is ingeschakeld.
+
+PLUGIN_DENONAVPCONTROL_DIRECT_MSG
+	EN	Unavailable when in Direct or Pure Direct mode.
+	DE	Im Direktmodus nicht verfügbar.
+	NL	Niet beschikbaar in de directe modi.
+
+PLUGIN_DENONAVPCONTROL_SPEAKERS
+	EN	Multichannel stereo configuration
+	DE	Mehrkanal-Stereokonfiguration
+	NL	Meerkanaals stereoconfiguratie
+
+PLUGIN_DENONAVPCONTROL_SPEAKERS_DESC
+	EN	Choose the speaker mode you utilize for multichannel stereo. This setting will be used to customize the Channel Level Adjustment menu.
+	DE	Wählen Sie den Lautsprechermodus, den Sie für Mehrkanal-Stereo verwenden. Mit dieser Einstellung können Sie das Menü zur Kanalpegelanpassung anpassen.
+	NL	Kies de speakermodus die u gebruikt voor multichannel stereo. Deze instelling wordt gebruikt om het Channel Level Adjustment-menu aan te passen.
+
+PLUGIN_DENONAVPCONTROL_SW1
+	EN	Subwoofer Off
+	DE	Subwoofer aus
+	NL	Subwoofer uit
+
+PLUGIN_DENONAVPCONTROL_SW2
+	EN	Subwoofer On
+	DE	Subwoofer ein
+	NL	Subwoofer aan
+
+PLUGIN_DENONAVPCONTROL_CVFL
+	EN	Front left:
+	DE	Vorne links
+	NL	Vooraan links:
+
+PLUGIN_DENONAVPCONTROL_CVFR
+	EN	Front right:
+	DE	Vorne rechts:
+	NL	Rechtsvoor:
+
+PLUGIN_DENONAVPCONTROL_CVC
+	EN	Center:
+	DE	Center:
+	NL	Centrum:
+
+PLUGIN_DENONAVPCONTROL_CVSW
+	EN	Subwoofer:
+	DE	Subwoofer:
+	NL	Subwoofer:
+
+PLUGIN_DENONAVPCONTROL_CVSW1
+	EN	Subwoofer:
+	DE	Subwoofer:
+	NL	Subwoofer:
+
+PLUGIN_DENONAVPCONTROL_CVSL
+	EN	Surround left:
+	DE	Surround links:
+	NL	Surround links:
+
+PLUGIN_DENONAVPCONTROL_CVSR
+	EN	Surround right:
+	DE	Umgeben Sie rechts:
+	NL	Surround rechts:
+
+PLUGIN_DENONAVPCONTROL_CVFHL
+	EN	Front height left:
+	DE	Vorderhöhe links:
+	NL	Hoogte voorzijde links:
+
+PLUGIN_DENONAVPCONTROL_CVFHR
+	EN	Front height right:
+	DE	Vorderhöhe rechts:
+	NL	Hoogte voorzijde rechts:
+
+PLUGIN_DENONAVPCONTROL_CVFWL
+	EN	Front wide left:
+	DE	Vorne breit links:
+	NL	Voor breed links:
+
+PLUGIN_DENONAVPCONTROL_CVFWR
+	EN	Front wide right:
+	DE	Vorne breit rechts:
+	NL	Voor breed rechts:
+
+PLUGIN_DENONAVPCONTROL_CVSBL
+	EN	Surround back left:
+	DE	Surround hinten links:
+	NL	Surround linksachter:
+
+PLUGIN_DENONAVPCONTROL_CVSBR
+	EN	Surround back right:
+	DE	Surround hinten rechts:
+	NL	Surround rechtsachter:
+
+PLUGIN_DENONAVPCONTROL_VOLUME
+	EN	Value
+	DE	Wert
+	NL	Waarde
+
+PLUGIN_DENONAVPCONTROL_QUICK_SAVE1
+	EN	Save Current Audio Settings
+	DE	Audioeinstellungen speichern
+	NL	Audio-instellingen opslaan
+
+PLUGIN_DENONAVPCONTROL_QUICK_SAVE2
+	EN	to Quick Select
+	DE	in Quick Select
+	NL	in Quick Select
+
+PLUGIN_DENONAVPCONTROL_QUICK_SAVE3
+	EN	Audio settings saved to Quick Select
+	DE	Audioeinstellungen gespeichert in Quick Select
+	NL	Audio-instellingen opgeslagen in Quick Select
+
+PLUGIN_DENONAVPCONTROL_MENU_HEADING
+	EN	Denon/Marantz AVR Settings
+	DE	Denon/Marantz AVR-Einstellungen
+	NL	Denon/Marantz AVR-instellingen
+
+PLUGIN_DENONAVPCONTROL_MENU_NOT_READY
+	EN	AVR is not on or not initialized.
+	DE	AVR ist nicht eingeschaltet oder nicht initialisiert.
+	NL	AVR is niet aan of is niet geïnitialiseerd.
+
+PLUGIN_DENONAVPCONTROL_MENU_NOT_ACTIVE
+	EN	AVR menu not active for this player.
+	DE	AVR-Menü für diesen Player nicht aktiv.
+	NL	AVR-menu niet actief voor deze speler.
