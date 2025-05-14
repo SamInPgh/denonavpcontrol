@@ -33,4 +33,13 @@ jobs:
         uses: actions/upload-artifact@v4.6.2
         with:
           path:
-            DenonAvpControl_${{ github.event.inputs.release_version }}.zip                
+            DenonAvpControl_${{ github.event.inputs.release_version }}.zip
+
+      - name: Create Release
+        # You may pin to the exact commit or the version.
+        # uses: ncipollo/release-action@2c591bcc8ecdcd2db72b97d6147f871fcd833ba5
+        uses: ncipollo/release-action@v1.14.0
+        with:
+          artifacts: # optional, default is 
+            DenonAvpControl_${{ github.event.inputs.release_version }}.zip
+          
