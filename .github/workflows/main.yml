@@ -10,7 +10,7 @@ on:
       release_version:
         description: 'Release version'
         required: true
-        default: 'x.x.x'
+        default: 'x.x'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -26,4 +26,5 @@ jobs:
 
       - name: Create zip
         run: |            
-          zip -r DenonAvpControl_${{ github.event.inputs.release_version }}.zip src
+          zip -r DenonAvpControl_${{ github.event.inputs.release_version }}.zip DenonAvpControl
+          sha1sum DenonAvpControl_${{ github.event.inputs.release_version }}.zip
