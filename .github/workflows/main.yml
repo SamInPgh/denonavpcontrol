@@ -42,4 +42,7 @@ jobs:
         with:
           artifacts: # optional, default is 
             DenonAvpControl_${{ github.event.inputs.release_version }}.zip
+          tag:
+            ${{ github.event.inputs.release_version }}
+          
           
