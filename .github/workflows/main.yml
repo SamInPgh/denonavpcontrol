@@ -31,12 +31,6 @@ jobs:
         run: |            
           zip -r DenonAvpControl_${{ github.event.inputs.release_version }}.zip DenonAvpControl
           echo "ZIP_SHA=$(sha1sum DenonAvpControl_${{ github.event.inputs.release_version }}.zip | cut -d " " -f1)" >> $GITHUB_ENV
-          
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v4.6.2
-        with:
-          path:
-            DenonAvpControl_${{ github.event.inputs.release_version }}.zip
 
       - name: Create Release
         # You may pin to the exact commit or the version.
@@ -93,13 +87,6 @@ jobs:
           replace:
             https://github.com/${{ github.repository }}/releases/download/${{ github.event.inputs.release_version }}/DenonAvpControl_${{ github.event.inputs.release_version }}.zip
 
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v4.6.2
-        with:
-          name:
-            repo
-          path:
-            repo.xml
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Update repo.xml with latest release  
