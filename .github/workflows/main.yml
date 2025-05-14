@@ -91,7 +91,7 @@ jobs:
             /extensions/plugins/plugin/url
           # value to replace with
           replace:
-            https://github.com/bjarteskogoy/denonavpcontrol/releases/download/${{ github.event.inputs.release_version }}/DenonAvpControl_${{ github.event.inputs.release_version }}.zip
+            https://github.com/${{ github.repository }}/releases/download/${{ github.event.inputs.release_version }}/DenonAvpControl_${{ github.event.inputs.release_version }}.zip
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.6.2
