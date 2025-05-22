@@ -1,0 +1,19 @@
+<?xml version="1.0"?> 
+ <extension>
+  	<name>PLUGIN_DENONAVPCONTROL_MODULE_NAME</name> 
+  	<creator>Chris Couper, Sam Yahres</creator> 
+   	<email>syahres@gmail.com</email> 
+ 	<defaultState>enabled</defaultState> 
+  	<description>PLUGIN_DENONAVPCONTROL_DESCRIPTION</description> 
+  	<homepageURL>https://github.com/SamInPgh/denonavpcontrol</homepageURL> 
+  	<id>5D7FF5EB-EC04-41FA-91AA-ACE45E811017</id> 
+	<icon>plugins/DenonAvpControl/html/images/denon_control.png</icon>
+  	<module>Plugins::DenonAvpControl::Plugin</module>
+ 	<targetApplication>
+  		<id>SqueezeCenter</id> 
+  		<maxVersion>*</maxVersion> 
+  		<minVersion>7.0</minVersion> 
+  	</targetApplication>
+  	<type>2</type> 
+  	<version>5.4</version> 
+  </extension>
