@@ -161,6 +161,10 @@
 #					   when the player's volume is "Fixed at 100%". This method will allow these client apps to replace their option to always process
 #					   volume commands for these players with a way to make the determination on a player by player basis.
 #					   Further support for players using the Groups plugin and routine code cleanup.
+#	2025/6/12 V5.4.1 - Add support for single-zone Denon and Marantz streaming amplifiers other than the MODEL M1 and Home Amp that have
+#					   reverted back to the traditional volume control format used in the past. It is unfortunate that the MODEL M1 and 
+#					   Home Amp have now become anomalies that must be given special treatment in the plugin. Multi-zone streaming amplifiers
+#					   may have to be given yet another AVR type if support is required for them in the future.	
 
 #	----------------------------------------------------------------------
 #
@@ -508,7 +512,7 @@ sub newPlayerCheck {
 
 	# get the model info from the AVR
 	if ($avrType == 3) {  # Streaming amp
-		$gModelInfo{$avpIPAddress} = "Streaming amplifier";
+		$gModelInfo{$avpIPAddress} = "Marantz Model M1 or Denon Home Amp";
 		Slim::Utils::Timers::setTimer( $client, (Time::HiRes::time() + 0.5 ), \&getAvpInputTable);
 	} else {
 		Slim::Utils::Timers::setTimer( $client, (Time::HiRes::time() + (5 * $gPluginClients) + 0.5 ), \&getAvpModelInfo);
@@ -2444,14 +2448,14 @@ sub calculateAvrVolume {
 	$log->debug("Raw subVol: $subVol \n");
 #	$log->debug("MaxVol: $channels{$client,'MVMAX'} \n");
 	my $width = 2;
-	if ($zone == 0 && $avrType < 3 ) {  # 0.5dB increments only supported for main zone of AVP/AVR
+	if ($zone == 0 && $avrType != 3 ) {  # 0.5dB increments only supported for main zone of AVP/AVR
 		my $digit = int(substr($subVol,2,1));
 		$subVol = int(($subVol+2)/10);  # round up for values of .8 and .9
 		if (($digit>2) && ($digit<8)) {
 			$subVol = $subVol*10 + 5;
 			$width = 3;
 		}
-	} else {  # other zones or streaming amps
+	} else {  # other zones or Marantz M1 / Denon Home Amp
 		$subVol = int(($subVol+5)/10);
 		if ($avrType == 3 ) {  # streaming amp
 			$width = 3;
@@ -3051,7 +3055,7 @@ sub calculateSBVolume {  # convert AVR volume to SB value (0-100)
 	$log->debug("Max volume: $maxVolume \n");
 	$log->debug("AVR volume: $intVol \n");
 
-	if ( ($avrType == 3) && ($intVol <=100)) {  # streaming amplifier
+	if ( ($avrType == 3) && ($intVol <=100)) {  # Marantz M1 or Denon Home Amp
 		$intVol *= 10;
 	} elsif ( (length($avpVol) < 3) || (substr($avpVol,2,1) ne '5') ) {
 		$intVol = substr($avpVol,0,2) * 10;

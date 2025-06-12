@@ -10,7 +10,7 @@
 				var element2=document.getElementById('inputSource');
 				var element3=document.getElementById('zone');
 				var element4=document.getElementById('audioMenu');
-				if (val=='3') {
+				if (val>='3') {
 					var event = new Event('change');
 					element1.value=0;
 					element1.disabled=1;
@@ -85,6 +85,7 @@
                 	       	<option value="1" [% IF prefs.pref_Avp == "1" %]selected[% END %]>Denon AVP</option>
                         	<option value="2" [% IF prefs.pref_Avp == "2" %]selected[% END %]>Marantz AVR</option>
                         	<option value="3" [% IF prefs.pref_Avp == "3" %]selected[% END %]>Marantz MODEL M1 or Denon Home Amp</option>
+                        	<option value="4" [% IF prefs.pref_Avp == "4" %]selected[% END %]>Other Single-zone Marantz or Denon Streaming Amp</option>
 	               	</select>
 		[% END %]
 

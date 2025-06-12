@@ -548,8 +548,8 @@ sub SendNetAvpPowerStatus {
 	my $cprefs = $prefs->client($client);
 	my $avrType = $cprefs->get('pref_Avp');
 
-	if ($avrType == 3 ) {
-		$request= "PW?" . $CR ;   # single zone power amps
+	if ($avrType >= 3 ) {
+		$request= "PW?" . $CR ;   # single zone streaming amps
 	} elsif ($zone == 0 ) {
 		$request= "ZM?" . $CR;
 	} elsif ($zone == 1 ) {
@@ -582,8 +582,8 @@ sub SendNetAvpOn {
 	my $cprefs = $prefs->client($client);
 	my $avrType = $cprefs->get('pref_Avp');
 
-	if ($avrType == 3 ) {
-		$request= "PWON" . $CR ;  # single zone power amps
+	if ($avrType >= 3 ) {
+		$request= "PWON" . $CR ;  # single zone streaming amps
 	} elsif ($zone == 0 ) {
 		$request= "ZMON" . $CR;
 	} elsif ($zone == 1 ) {
@@ -613,8 +613,8 @@ sub SendNetAvpStandBy {
 	my $cprefs = $prefs->client($client);
 	my $avrType = $cprefs->get('pref_Avp');
 
-	if ($avrType == 3 ) {
-		$request= "PWSTANDBY" . $CR ;  # single zone power amps
+	if ($avrType >= 3 ) {
+		$request= "PWSTANDBY" . $CR ;  # single zone streaming amps
 	} elsif ($zone == 0 ) {
 		$request= "ZMOFF" . $CR ;
 	} elsif ($zone == 1 ) {
@@ -789,10 +789,21 @@ sub SendNetAvpGetInputs {  # get the input strings from the AVR
 	my $avrType = $cprefs->get('pref_Avp');
 
 	if ($avrType == 3) {  # Streaming amp (Marantz MODEL M1 or Denon Home Amp) - Hardcoded for now
-		$inputs{$url,0} = 3;
+		$inputs{$url,0} = 4;
 		$inputs{$url,1} = "OPT|Digital";
 		$inputs{$url,2} = "LINE|Line";
 		$inputs{$url,3} = "TV|HDMI";
+		$inputs{$url,4} = "NET|Network";
+		$classPlugin->updateInputTable($client);
+	} elsif ($avrType == 4) {  # Newer streaming amps) - Hardcoded for now
+		$inputs{$url,0} = 7;
+		$inputs{$url,1} = "OPTICAL1|Optical";
+		$inputs{$url,2} = "COAXIAL|Coaxial";
+		$inputs{$url,3} = "LINE|Line";
+		$inputs{$url,4} = "HDMIARC|HDMI/ARC";
+		$inputs{$url,5} = "ANALOG1|Line";
+		$inputs{$url,6} = "ANALOGCD|CD";
+		$inputs{$url,7} = "NET|Network";		
 		$classPlugin->updateInputTable($client);
 	} else {
 		$inactiveInputs{$url,0} = 0;  # initialize the inactive input table
@@ -1203,7 +1214,7 @@ sub _read {
 			$inputs{$url,0} = $j;  # store the number of table entries
 		}
 	}
-	elsif ($request =~ m/^(Z[2-4])?CV\?|^SI[^\?]/ && ($avrType != 3) ) {  #if CV mode then need to read each item as a new line
+	elsif ($request =~ m/^(Z[2-4])?CV\?|^SI[^\?]/ && ($avrType < 3) ) {  #if CV mode then need to read each item as a new line
 		$buf = $buf . &getBuf($self->socket, 1);
 
 		$log->debug("gGetPSModes:  ".$gGetPSModes{$client} );

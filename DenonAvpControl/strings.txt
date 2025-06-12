@@ -145,9 +145,9 @@ PLUGIN_DENONAVPCONTROL_QUICKSELECT
 	NL	Optie voor invoerselectie
 
 PLUGIN_DENONAVPCONTROL_QUICKSELECT_DESC
-	EN	Select which Quick Select (Denon), Smart Select (Marantz) or Input Source you would like to switch to when the player is turned on. For the Marantz MODEL M1 and Denon Home Amp, the valid input sources are 'Digital', 'Line' and 'HDMI'.
-	DE	Wählen Sie aus, zu welcher Quick Select- (Denon), Smart Select- (Marantz) oder Eingangsquelle Sie wechseln möchten, wenn der Player eingeschaltet wird. Für Marantz MODEL M1 und Denon Home Amp sind die gültigen Eingangsquellen „Digital“, „Line“ und „HDMI“.
-	NL	Selecteer naar welke Quick Select (Denon), Smart Select (Marantz) of ingangsbron u wilt overschakelen wanneer de speler wordt ingeschakeld. Voor de Marantz MODEL M1 en Denon Home Amp zijn de geldige ingangsbronnen 'Digitaal', 'Lijn' en 'HDMI'.
+	EN	Select which Quick Select (Denon), Smart Select (Marantz) or Input Source (as displayed on the AVR's front panel) that you would like it to switch to when the Lyrion player is turned on.
+	DE	Wählen Sie aus, zu welcher Quick Select- (Denon), Smart Select- (Marantz) oder Eingangsquelle (wie auf der Vorderseite des AVR angezeigt) gewechselt werden soll, wenn der Lyrion-Player eingeschaltet wird.
+	NL	Selecteer welke Quick Select (Denon), Smart Select (Marantz) of Input Source (zoals weergegeven op het voorpaneel van de AVR) u wilt gebruiken wanneer de Lyrion-speler wordt ingeschakeld.
 
 PLUGIN_DENONAVPCONTROL_ZONE1
 	EN	Main
