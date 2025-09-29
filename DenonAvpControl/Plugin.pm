@@ -156,15 +156,18 @@
 #					   Only populate the input source table via SSSOD and SSFUN commands if at least one player is using the Audio Settings menus or
 #					   has specified an AVR input source rather than a Quick Select command.
 #	2025/2/22 V5.4  -  Only use the prefs-based polling interval for polling the AVR's power status when the player is ON. When the player is OFF, poll
-#					   every 30 seconds. 
+#					   every 30 seconds.
 #					   Add a way for client apps to determine that player volume commands should still be processed for players using the plugin even
 #					   when the player's volume is "Fixed at 100%". This method will allow these client apps to replace their option to always process
 #					   volume commands for these players with a way to make the determination on a player by player basis.
 #					   Further support for players using the Groups plugin and routine code cleanup.
 #	2025/6/12 V5.4.1 - Add support for single-zone Denon and Marantz streaming amplifiers other than the MODEL M1 and Home Amp that have
-#					   reverted back to the traditional volume control format used in the past. It is unfortunate that the MODEL M1 and 
+#					   reverted back to the traditional volume control format used in the past. It is unfortunate that the MODEL M1 and
 #					   Home Amp have now become anomalies that must be given special treatment in the plugin. Multi-zone streaming amplifiers
-#					   may have to be given yet another AVR type if support is required for them in the future.	
+#					   may have to be given yet another AVR type if support is required for them in the future.
+#	2025/9/28 V5.4.2 - Fix problems beginning playback to powered off Denon/Marantz AVR UPnP players caused by buggy firmware (finally!).
+#					   Always turn AVR off when player is turned off and no Quick Select or AVR input source has been specified for the player.
+#					   Re-order the audio settings menu to make better sense.
 
 #	----------------------------------------------------------------------
 #
@@ -243,6 +246,7 @@ my %nightMode;		# Denon Night Mode Index
 my %restorer;		# Denon Restorer Index
 my %refLevel;		# Denon Ref Level Index
 my %subwoofer;		# Denon subwoofer active
+my %isUPnP;			# Client is using the Lyrion UPnP bridge
 my %gAllowQSUpdate;	# Used to block multiple QS updates from one menu instance
 my %gMenuUpdate;	# Used to signal that no menu update should occur
 my %gMenuPopulated;	# Used to indicate whether the menu should be re-populated
@@ -275,7 +279,6 @@ sub initPlugin {
 	my $classSettings = Plugins::DenonAvpControl::Settings->new( $classPlugin);
 
 	# Install callback to get client setup
-#	Slim::Control::Request::subscribe( \&newPlayerCheck, [['client'],['new']]);
 	Slim::Control::Request::subscribe( \&newPlayerCheck, [['client'],['new', 'reconnect']]);
 
 	# init the DenonAvpComms plugin
@@ -372,14 +375,14 @@ sub newPlayerCheck {
 		$log->debug( "No IP Address specified for: ".$client->name()."\n");
 		#now clear callback for those clients that are not part of the plugin
 		clearCallback();
-		return;		
+		return;
 	}
-	
+
 	if ($request->isCommand([['client'], ['reconnect']])) {
 		$log->debug( "Player " . $client->name() . " is reconnecting\n");
 		clearCallback();
 	}
-		
+
 
 	my $avpIPAddress = "HTTP://" . $cprefs->get('avpAddress');
 	if ( !($avpIPAddress =~ m/:\d+/) ) {  # only add the telnet port if one is not provided
@@ -428,6 +431,7 @@ sub newPlayerCheck {
 	$log->debug("digitalVolumeControl is: " . preferences('server')->client($client)->get('digitalVolumeControl') . "\n");
 	$log->debug("Player output level is: " . $forv . "\n");
 	$log->debug("Player model is: " . $client->modelName() . "\n");
+	$isUPnP{$client} = $client->modelName() eq "UPnPBridge" && $client->name() =~ m/^Denon|^Marantz/;
 	$log->debug("Player type is: " . $client->model() . "\n");
 	$client->modelName("Denon/Marantz AVR");
 
@@ -725,50 +729,6 @@ sub avpTop {
 	}
 
 	if ($iMenu && ($zone == $prefZone)) {
-		if ( !($clientApp =~ m/^Squeeze-Control/) ) {   # skip slider controls for Squeeze Ctrl client
-			if ($outputLevelFixed{$client} == 0) {
-				$menuText = $client->string('PLUGIN_DENONAVPCONTROL_AUDIO0');
-				if ($zone > 0) {
-					$menuText .= "\nZone: " . ($zone+1);
-				}
-
-				push @menu,	{
-						text => $menuText,
-						id      => 'preLevel',
-						"icon" => $volIcon,
-						actions  => {
-							go  => {
-								player => 0,
-								cmd    => [ 'avpLvl' ],
-								params	=> {
-									menu => 'avpLvl',
-								},
-							},
-						},
-					};
-			}
-
-			$menuText = $client->string('PLUGIN_DENONAVPCONTROL_AUDIO8');  # channel levels
-			if ($zone > 0) {
-				$menuText .= "\nZone: " . ($zone+1);
-			}
-
-			push @menu,	{
-					text => $menuText,
-					id      => 'channels',
-					"icon" => $chnIcon,
-					actions  => {
-						go  => {
-							player => 0,
-							cmd    => [ 'avpChannels' ],
-							params	=> {
-								menu => 'avpChannels',
-							},
-						},
-					},
-				};
-		}
-
 		$menuText = $client->string('PLUGIN_DENONAVPCONTROL_AUDIO9');  # quick select
 		if ($zone > 0) {
 			$menuText .= "\nZone: " . ($zone+1);
@@ -824,7 +784,53 @@ sub avpTop {
 						},
 					},
 				};
+		}
 
+		if ( !($clientApp =~ m/^Squeeze-Control/) ) {   # skip slider controls for Squeeze Ctrl client
+			if ($outputLevelFixed{$client} == 0) {
+				$menuText = $client->string('PLUGIN_DENONAVPCONTROL_AUDIO0');
+				if ($zone > 0) {
+					$menuText .= "\nZone: " . ($zone+1);
+				}
+
+				push @menu,	{
+						text => $menuText,
+						id      => 'preLevel',
+						"icon" => $volIcon,
+						actions  => {
+							go  => {
+								player => 0,
+								cmd    => [ 'avpLvl' ],
+								params	=> {
+									menu => 'avpLvl',
+								},
+							},
+						},
+					};
+			}
+
+			$menuText = $client->string('PLUGIN_DENONAVPCONTROL_AUDIO8');  # channel levels
+			if ($zone > 0) {
+				$menuText .= "\nZone: " . ($zone+1);
+			}
+
+			push @menu,	{
+					text => $menuText,
+					id      => 'channels',
+					"icon" => $chnIcon,
+					actions  => {
+						go  => {
+							player => 0,
+							cmd    => [ 'avpChannels' ],
+							params	=> {
+								menu => 'avpChannels',
+							},
+						},
+					},
+				};
+		}
+
+		if ($zone == 0) {  # only for main zone
 			push @menu,	{
 					text => $client->string('PLUGIN_DENONAVPCONTROL_AUDIO2'),
 					id      => 'roomequalizer',
@@ -2177,7 +2183,7 @@ sub prefSetCallback {
 	if ( !$client->power() ) {  # if player is not on, check to see if we need to turn off the AVR
 		$log->debug( "prefSetCallback() Player " . $client->name() . " is powered off\n");
 		# if the AVR is on, turn it off
-		if ($iPowerState{$client,$prefZone} && !$iPowerOffInProgress{$client} && !$iPowerOnInProgress{$client}) {  
+		if ($iPowerState{$client,$prefZone} && !$iPowerOffInProgress{$client} && !$iPowerOnInProgress{$client}) {
 			$log->debug( "prefSetCallback() Turning the AVR off\n");
 			my $gPowerOffDelay = 0.1;
 			$iPowerOffInProgress{$client} = 1;  # prevent re-entry
@@ -2271,8 +2277,8 @@ sub commandCallback {
 
 	my $timersRemoved;
 
-	my $gPowerOnDelay = 0.1;						# Delay to turn on amplifier after player has been turned on (in seconds)
-	my $gPowerOffDelay = 0.1;						# Delay to turn off amplifier after player has been turned off (in seconds)
+	my $gPowerOnDelay = 0.1;				# Delay to turn on amplifier after player has been turned on (in seconds)
+	my $gPowerOffDelay = 0.1;				# Delay to turn off amplifier after player has been turned off (in seconds)
 
 	my $iPower = $client->power();		# Current player power state
 	my $avpIPAddress = $gIPAddress{$client};
@@ -2283,6 +2289,7 @@ sub commandCallback {
 	 || $request->isCommand([['play']])
 	 || ($request->isCommand([['pause']]) && ($request->getParam('_newvalue') eq '0'))  # unpause but not pause
 	 || $request->isCommand([['playlist'], ['play']])
+	 || $request->isCommand([['playlist'], ['jump']])
 	 || $request->isCommand([['playlist'], ['newsong']]) ) {
 #		$log->debug("Power request1: $request \n");
 		# Check with last known power state -> if different switch modes
@@ -2309,7 +2316,7 @@ sub commandCallback {
 						$iInitialAvpVol{$client} = calculateAvrVolume($client, 25);  # default to 25%
 						$qSelect{$client} = $quickSelect;
 
-						if ( $request->isCommand([['play']]) || $request->isCommand([['playlist']])) {  # only play and playlist
+						if ($request->isCommand([['play']]) || $request->isCommand([['playlist']])) {  # only play and playlist
 							$log->debug("commandCallback() Pausing playback during power-on \n");
 							my $request = $client->execute([('pause', '1')]);
 							$request->addResult('denonavpcontrolInitiated', 1);
@@ -2335,10 +2342,16 @@ sub commandCallback {
 				}
 				Slim::Utils::Timers::setTimer( $client, (Time::HiRes::time() + $gPowerOffDelay), \&handlePowerOff);
 			}
-		} elsif ( $iPowerOnInProgress{$client}) {   # pause playback during power on
+		} elsif ( $iPowerOnInProgress{$client}) {   # pause or stop players during power on
 			if ( !$request->isCommand([['pause']]) && ($iPaused{$client} < 2) ) {   # only for power, play and playlist (not pause)
-				$log->debug("commandCallback() Pausing playback during power-on \n");
-				my $request = $client->execute([('pause', '1')]);
+				my $request;
+				if ( !$isUPnP{$client} ) {  #  pause non-UPnP players during power on
+					$log->debug("commandCallback() Pausing playback during power-on \n");
+					$request = $client->execute([('pause', '1')]);
+				} else {  # stop UPnP players
+					$log->debug("commandCallback() Stopping playback during power-on \n");
+					$request = $client->execute([('stop')]);
+				}
 				$request->addResult('denonavpcontrolInitiated', 1);
 				$iPaused{$client} = 1;
 			}
@@ -2580,23 +2593,23 @@ sub handlePowerOn2 {
 		return;
 	}
 
-	if ( length($inputSource)) {  # Switch to the AVR source if specified
+	if ( length($inputSource) ) {  # Switch to the AVR source if specified
 		my $numInputs = $inputs{$avpIPAddress,0};
 		my $found = 0;
 		my $i = 1;
 		my ($avrSource, $userSource);
 
-		while ($i <= $numInputs && !$found) {
+		while ( $i <= $numInputs && !$found ) {
 			$log->debug("Table entry #" . $i . " is: " . $inputs{$avpIPAddress,$i} . "\n");
 			($avrSource, $userSource) = split (/\|/, $inputs{$avpIPAddress,$i});
 			$log->debug("|" . $avrSource . "," . $userSource . "|\n");
-			if ($userSource eq $inputSource) {    # if this is the desired input
+			if ( $userSource eq $inputSource) {    # if this is the desired input
 				$found = 1;
 			}
 			$i++;
 		};
 
-		if ($found) {
+		if ( $found ) {
 			Slim::Utils::Timers::setTimer( $client, (Time::HiRes::time() + $iDelay), \&handleInputSelect, $avrSource);
 			return;
 		} else {
@@ -2804,7 +2817,10 @@ sub handleInputQuery {
 
 	if ( ($iPowerOffInProgress{$client}) ) {
 		my $force;
-		if ( $avrInput eq $avrQSInput{$client} ) {  # only power off if it's the same input we started with
+		my $quickSelect = $cprefs->get('quickSelect');
+		my $inputSource = length($cprefs->get('inputSource'));
+		if ( $avrInput eq $avrQSInput{$client} || (!$quickSelect && !$inputSource) ) {
+			# only power off if it's the input for the associated player or if none was specified
 			$force = 1;
 			$log->debug("Handling primary zone Power OFF \n");
 		} else {
@@ -2986,8 +3002,16 @@ sub startPlayback {  # resume playback after pause during power on
 		return;
 	}
 
-	$log->debug("Resuming paused playback after power-on \n");
-	my $request = $client->execute([('pause', 0)]);
+	my $request;
+	if ( !$isUPnP{$client} ) {  #  unpause non-UPnP players during power on
+		$log->debug("Resuming paused playback after power-on \n");
+		$request = $client->execute([('pause', 0)]);
+	} else {  # restart playback for UPnP players
+		$log->debug("Resuming stopped playback after power-on \n");
+		$request = $client->execute([('playlist', 'index', '+0')]);
+		$request->addResult('denonavpcontrolInitiated', 1);
+		$request = $client->execute([('play')]);
+	}
 	$request->addResult('denonavpcontrolInitiated', 1);
 	$iPaused{$client} = 2;    # Indicate that we are no longer pausing playback during power on
 }
