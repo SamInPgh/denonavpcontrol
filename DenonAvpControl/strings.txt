@@ -88,7 +88,7 @@ PLUGIN_DENONAVPCONTROL_POWERPOLL_DESC
 	EN	Enter the polling interval in seconds for power synchronization. The valid range is 5 to 60 seconds.
 	DE	Geben Sie das Abfrageintervall für die Stromsynchronisierung in Sekunden ein. Der gültige Bereich liegt zwischen 5 und 60 Sekunden.
 	NL	Voer het pollinginterval in seconden in voor stroomsynchronisatie. Het geldige bereik is 5 tot 60 seconden.
-	
+
 PLUGIN_DENONAVPCONTROL_VOLSYNCH_ENABLED
 	EN	Enable syncing the volume?
 	DE	Lautstärkensynchronisation einschalten?
@@ -108,6 +108,16 @@ PLUGIN_DENONAVPCONTROL_VOLPOLL_DESC
 	EN	Enter the polling interval in seconds for volume synchronization. The valid range is 0 (off) to 30 seconds.
 	DE	Geben Sie das Abfrageintervall für die Volumesynchronisierung in Sekunden ein. Der gültige Bereich liegt zwischen 0 (aus) und 30 Sekunden.
 	NL	Voer het pollinginterval in seconden in voor volumesynchronisatie. Het geldige bereik is 0 (uit) tot 30 seconden.
+
+PLUGIN_DENONAVPCONTROL_SOURCESYNCH_ENABLED
+	EN	Pause the player when the AVR source changes?
+	DE	Den Player anhalten, wenn sich die AVR-Quelle ändert?
+	NL	De speler pauzeren wanneer de AVR-bron verandert?
+
+PLUGIN_DENONAVPCONTROL_SOURCESYNCH_ENABLED_DESC
+	EN	Select this option if you want the player to be paused when the AVR input is switched away from the one corresponding to the player. Note: This option requires power syncing to be enabled, and the AVR input will be polled when the power is polled.
+	DE	Wählen Sie diese Option, wenn der Player angehalten werden soll, wenn der AVR-Eingang vom entsprechenden Eingang des Players weggeschaltet wird. Hinweis: Für diese Option muss die Stromsynchronisierung aktiviert sein. Der AVR-Eingang wird bei der Stromabfrage abgefragt.
+	NL	Selecteer deze optie als u wilt dat de speler pauzeert wanneer de AVR-ingang wordt omgeschakeld van de ingang die overeenkomt met de speler. Let op: voor deze optie moet stroomsynchronisatie ingeschakeld zijn. De AVR-ingang wordt dan gepolled wanneer de stroom wordt gepolled.
 
 PLUGIN_DENONAVPCONTROL_INPUT
 	EN	AVR Input Source

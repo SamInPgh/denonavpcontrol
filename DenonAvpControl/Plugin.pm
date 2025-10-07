@@ -156,7 +156,7 @@
 #					   Only populate the input source table via SSSOD and SSFUN commands if at least one player is using the Audio Settings menus or
 #					   has specified an AVR input source rather than a Quick Select command.
 #	2025/2/22 V5.4  -  Only use the prefs-based polling interval for polling the AVR's power status when the player is ON. When the player is OFF, poll
-#					   every 30 seconds.
+#					   every 60 seconds.
 #					   Add a way for client apps to determine that player volume commands should still be processed for players using the plugin even
 #					   when the player's volume is "Fixed at 100%". This method will allow these client apps to replace their option to always process
 #					   volume commands for these players with a way to make the determination on a player by player basis.
@@ -165,9 +165,12 @@
 #					   reverted back to the traditional volume control format used in the past. It is unfortunate that the MODEL M1 and
 #					   Home Amp have now become anomalies that must be given special treatment in the plugin. Multi-zone streaming amplifiers
 #					   may have to be given yet another AVR type if support is required for them in the future.
-#	2025/9/28 V5.4.2 - Fix problems beginning playback to powered off Denon/Marantz AVR UPnP players caused by buggy firmware (finally!).
+#	2025/10/7 V5.4.2 - Fix problems beginning playback to powered off Denon/Marantz AVR UPnP players caused by buggy firmware (finally!).
 #					   Always turn AVR off when player is turned off and no Quick Select or AVR input source has been specified for the player.
 #					   Re-order the audio settings menu to make better sense.
+#					   Limit AVR Input source in menu to 16 characters, as the AVR's do.
+#					   Don't turn the AVR off from prefSetCallback() when changes are made for a powered off player.
+#					   Add an option to automatically pause the player when the AVR Zone associated with it is switched to another input.
 
 #	----------------------------------------------------------------------
 #
@@ -226,6 +229,7 @@ my %avrQSInput;		# AVR input associated with the player's defined Quick Select
 my %outputLevelFixed;  # Used to indicate whether the player is using a fixed (100%) output level
 my %gFixedVarToggleInProgress;  # Used in the pref callbacks to distinguish server from client requests
 my %iInitialAvpVol; # Used to restore AVR volume to initial QS or amp default volume
+my %iInputSyncInProgress; # Used to optionally pause the player when an AVR input change has been detected
 
 # The following global hash variables are for use in the audio menu, hashed by client unless otherwise noted
 my @clientIds = (); # Array of MAC addresses used by some client apps to filter players using the menu
@@ -444,6 +448,7 @@ sub newPlayerCheck {
 	$iPowerOnInProgress{$client} = 0;
 	$iPowerOffInProgress{$client} = 0;
 	$iPowerState{$client,$zone} = 0;
+	$iInputSyncInProgress{$client} = 0;
 
 	# Install callbacks to get client state changes
 	Slim::Control::Request::subscribe( \&commandCallback, [['power', 'play', 'playlist', 'pause', 'mixer']], $client);
@@ -2182,13 +2187,16 @@ sub prefSetCallback {
 
 	if ( !$client->power() ) {  # if player is not on, check to see if we need to turn off the AVR
 		$log->debug( "prefSetCallback() Player " . $client->name() . " is powered off\n");
+
 		# if the AVR is on, turn it off
-		if ($iPowerState{$client,$prefZone} && !$iPowerOffInProgress{$client} && !$iPowerOnInProgress{$client}) {
-			$log->debug( "prefSetCallback() Turning the AVR off\n");
-			my $gPowerOffDelay = 0.1;
-			$iPowerOffInProgress{$client} = 1;  # prevent re-entry
-			Slim::Utils::Timers::setTimer( $client, (Time::HiRes::time() + $gPowerOffDelay), \&handlePowerOff);
-		}
+		# TESTING - avoid powering the AVR off unnecessarily
+
+#		if ($iPowerState{$client,$prefZone} && !$iPowerOffInProgress{$client} && !$iPowerOnInProgress{$client}) {
+#			$log->debug( "prefSetCallback() Turning the AVR off\n");
+#			my $gPowerOffDelay = 0.1;
+#			$iPowerOffInProgress{$client} = 1;  # prevent re-entry
+#			Slim::Utils::Timers::setTimer( $client, (Time::HiRes::time() + $gPowerOffDelay), \&handlePowerOff);
+#		}
 	}
 	elsif (!$prefPowerOnPlay && !$iPowerState{$client,$prefZone} && !$iPowerOnInProgress{$client}) {  # if the AVR is off, turn it on
 		$log->debug( "prefSetCallback() Player " . $client->name() . " is powered on\n");
@@ -2665,8 +2673,8 @@ sub syncPowerState {
 	my $powerPoll = int($cprefs->get('powerPoll'));
 
 	$log->debug("Checking Power ON/OFF status return \n");
-	if ( $avrPower != $iPowerState{$client,$zone} ) {  #sync power if necessary
-		if ($iPowerOnInProgress{$client} == 1) {   	# ignore the request if a QS is in progress
+	if ($avrPower != $iPowerState{$client,$zone} ) {  #sync power if necessary
+		if ($iPowerOnInProgress{$client} == 1 ) {   # ignore the request if startup is in progress
 			$log->debug("Power on in progress: ignoring player sync On/Off request \n");
 		} else {
 			$log->debug("Turning player " . $player . ($avrPower ? " ON" : " OFF") . " to sync with AVR\n");
@@ -2685,6 +2693,15 @@ sub syncPowerState {
 			}
 		}
 	}
+
+	my $syncSource = $cprefs->get('pref_SourceSynch');
+	if ($avrPower == 1 && !$iPowerOnInProgress{$client} && $syncSource) {  # optionally check to see if the input source has changed
+		my $avpIPAddress = $gIPAddress{$client};
+		$log->debug("Polling to check the AVR input source...\n");
+		$iInputSyncInProgress{$client} = 1;
+		Plugins::DenonAvpControl::DenonAvpComms::SendNetAvpInputSource($client, $avpIPAddress, $zone);
+	}
+
 	Slim::Utils::Timers::killTimers( $client, \&handlePowerStatus );
 	if (!$client->power() && $powerPoll < 60) {  # if the player is off, minimum 60 seconds for poll
 		$powerPoll = 60;
@@ -2813,9 +2830,22 @@ sub handleInputQuery {
 
 	$log->debug("Handling input query response: " . $avrInput . "\n");
 
+	if ( $iInputSyncInProgress{$client} ) {  # if this is an input sync request, check it
+		$iInputSyncInProgress{$client} = 0;
+		if ( $avrInput ne $curAvrSource{$client} ) {  # the AVR input has changed
+			if ( $avrInput ne $avrQSInput{$client} && $client->power() ) {  # the input is not for the player
+				$log->debug("Input sync detected AVR source change. Pausing playback... \n");
+				my $request = $client->execute([('pause', '1')]);  # pause playback
+				$request->addResult('denonavpcontrolInitiated', 1);  # prevent callback loop
+			}
+			$curAvrSource{$client} = $avrInput;   # store the new source
+		}
+		return;
+	}
+
 	$curAvrSource{$client} = $avrInput;   # store the current source
 
-	if ( ($iPowerOffInProgress{$client}) ) {
+	if ( $iPowerOffInProgress{$client} ) {
 		my $force;
 		my $quickSelect = $cprefs->get('quickSelect');
 		my $inputSource = length($cprefs->get('inputSource'));

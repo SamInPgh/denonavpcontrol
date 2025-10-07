@@ -152,6 +152,11 @@ sub handler {
 			# Set the default polling interval when volume sync is off
 			$prefs->client($client)->set('volPoll', 0);
 		}
+		if ($params->{'pref_SourceSynch'}){ #save the source synch state
+			$prefs->client($client)->set('pref_SourceSynch', 1);
+		} else {
+			$prefs->client($client)->set('pref_SourceSynch', 0);
+		}
 		if ($params->{'pref_AudioMenu'}){ #save the audio menu state
 			$prefs->client($client)->set('pref_AudioMenu', 1);
 		} else {
@@ -240,6 +245,9 @@ sub handler {
 	}
 	if ($prefs->client($client)->get('pref_VolSynch') == '1') {
 		$params->{'prefs'}->{'pref_VolSynch'} = 1;
+	}
+	if ($prefs->client($client)->get('pref_SourceSynch') == '1') {
+		$params->{'prefs'}->{'pref_SourceSynch'} = 1;
 	}
 	if ($prefs->client($client)->get('pref_AudioMenu') == '1') {
 		$params->{'prefs'}->{'pref_AudioMenu'} = 1;

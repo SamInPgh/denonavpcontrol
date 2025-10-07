@@ -47,12 +47,15 @@
 			function checkPowerSynch(checked) {
 				var element1=document.getElementById('powerPoll');
 				var element2=document.getElementById('volSynch');
+				var element3=document.getElementById('sourceSynch');
 				if (!checked) {
 					element1.value=60;
 					element2.checked=0;
+					element3.checked=0;
 				}
 				element1.disabled=!checked;
 				element2.disabled=!checked;
+				element3.disabled=!checked;
 				checkVolSynch(element2.checked);
 			}
 			function checkVolSynch(checked) {
@@ -102,7 +105,7 @@
                	        	<option value="4" [% IF prefs.quickSelect == "4" %]selected[% END %]>[% "PLUGIN_DENONAVPCONTROL_QUICK4" | string %]</option>
                	        	<option value="5" [% IF prefs.quickSelect == "5" %]selected[% END %]>[% "PLUGIN_DENONAVPCONTROL_QUICK5" | string %]</option>
 	            </select>
-				<input type="text" class="stdedit" name="inputSource" id="inputSource" value="[% prefs.inputSource %]" size="16" />
+				<input type="text" class="stdedit" name="inputSource" id="inputSource" minlength="1" maxlength="16" value="[% prefs.inputSource %]" size="16" />
 		[% END %]
 
 		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_ZONE" desc="PLUGIN_DENONAVPCONTROL_ZONE_DESC" %]
@@ -145,6 +148,10 @@
 
 		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_VOLPOLL" desc="PLUGIN_DENONAVPCONTROL_VOLPOLL_DESC" %]
 			<input type="number" class="stdedit" name="volPoll" id="volPoll" min="0" max="30" value="[% prefs.volPoll %]" />
+		[% END %]
+
+		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_SOURCESYNCH_ENABLED" desc="PLUGIN_DENONAVPCONTROL_SOURCESYNCH_ENABLED_DESC" %]
+			<input name="pref_SourceSynch" id="sourceSynch" type="checkbox" [% IF prefs.pref_SourceSynch %] checked [% END %] >
 		[% END %]
 
 		[% WRAPPER settingGroup title="PLUGIN_DENONAVPCONTROL_AUDIOMENU_ENABLED" desc="PLUGIN_DENONAVPCONTROL_AUDIOMENU_ENABLED_DESC" %]
