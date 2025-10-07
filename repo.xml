@@ -1,7 +1,7 @@
 <?xml version='1.0' standalone='yes'?>
 <extensions>
   <plugins>
-    <plugin name="DenonAvpControl" version="5.4.1" minTarget="7.7" maxTarget="*">
+    <plugin name="DenonAvpControl" version="5.4.2" minTarget="7.7" maxTarget="*">
       <title lang="EN">Denon/Marantz AVR Control</title>
       <creator>Chris Couper, Sam Yahres</creator>
       <url>https://github.com/SamInPgh/denonavpcontrol/releases/download/5.4.1/DenonAvpControl.zip</url>
