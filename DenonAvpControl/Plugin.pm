@@ -171,6 +171,8 @@
 #					   Limit AVR Input source in menu to 16 characters, as the AVR's do.
 #					   Don't turn the AVR off from prefSetCallback() when changes are made for a powered off player.
 #					   Add an option to automatically pause the player when the AVR Zone associated with it is switched to another input.
+#	2025/11/03 V5.4.3 - Go back to leaving the AVR on when the player is turned off and no QS or Input Source has been specified.
+#					   Prevent volume from being set to 100% when the player is turned off, due to WiiM firmware (mis)behavior. 
 
 #	----------------------------------------------------------------------
 #
@@ -449,6 +451,7 @@ sub newPlayerCheck {
 	$iPowerOffInProgress{$client} = 0;
 	$iPowerState{$client,$zone} = 0;
 	$iInputSyncInProgress{$client} = 0;
+	$iInitialAvpVol{$client} = calculateAvrVolume($client, 25);
 
 	# Install callbacks to get client state changes
 	Slim::Control::Request::subscribe( \&commandCallback, [['power', 'play', 'playlist', 'pause', 'mixer']], $client);
@@ -2389,52 +2392,50 @@ sub commandCallback {
 		}
 	# Get clients volume adjustment
 	} elsif ( $request->isCommand([['mixer'], ['volume']]) && $outputLevelFixed{$client} ) {
-		if ( !$iPowerOnInProgress{$client} && $curAvrSource{$client} ne "") {
+		if ( !$iPowerOnInProgress{$client} ) {
 			my $volAdjust = $request->getParam('_newvalue');
-
-			$log->debug("*** DenonAvpControl:new SB vol: $volAdjust  \n");
-
-			my $char1 = substr($volAdjust,0,1);
-			my $getVolFromPlayer = 0;
-
-			#if it's an incremental adjustment, get the new volume from the client
-			if (($char1 eq '-') || ($char1 eq '+')) {
-				my $zone = $curAvrZone{$client};
-				if ($curVolume{$client,$zone} < 0) {
-					$volAdjust += abs($curVolume{$client,$zone});  # compensate for LMS setting volume to 0 after mute
-					my $request = $client->execute([('mixer', 'volume', $volAdjust)]);
-					# Add a result so we can detect our own volume adjustments, to prevent a feedback loop
-					$request->addResult('denonavpcontrolInitiated', 1);
-				}
-				else {
-					$getVolFromPlayer = 1;  # wait until we actually process the volume change
-				}
-			}
-			else {
-				# special case to catch SB Touch firmware bug that sets vol to 100 when output level is fixed
-#				if ( ($client->modelName() eq 'Squeezebox Touch') && $volAdjust == 100) {
-				if ( $volAdjust == 100) {  # a user reported getting a volume request of 100 from a Squeezelite player
-					$log->debug("*** DenonAvpControl:Volume set to 100% for $client->modelName() : changing to initial value  \n");
-					my $sbVolume = calculateSBVolume($client, $iInitialAvpVol{$client});
-					handleVolSet( $client, $sbVolume);  # set volume level to initial value
-					return;
-				}
+			
+			# special case to catch player firmware bug that sets vol to 100 when output level is fixed
+			if ( $volAdjust == 100) {
+				$log->debug("*** DenonAvpControl:Volume set to 100% for " . $client->name() . " : changing to initial value\n");
+				my $sbVolume = calculateSBVolume($client, $iInitialAvpVol{$client});
+				handleVolSet( $client, $sbVolume, 1);  # set volume level to initial value
+				return;
 			}
 
-			# kill any volume changes that may be going on within the timer
-			$timersRemoved = Slim::Utils::Timers::killTimers( $client, \&handleVolChanges);
+			if ( $curAvrSource{$client} ne "") {
+				$log->debug("*** DenonAvpControl:new SB vol: $volAdjust  \n");
 
-			# Kill outstanding mute requests
-			Slim::Utils::Timers::killTimers( $client, \&handleMutingToggle);
-			my $lastVolChange = Time::HiRes::time() - $gLastVolChange{$client};
-			my $iDelay = .25;  # set default volume change delay time
-			if ( $lastVolChange > 2 || ($lastVolChange > $iDelay  && $gDelayedVolChanges{$client} > 3)) {
-				# near-immediate vol change if it's been more than the default delay time and changes are backed up (or 2 secs otherwise)
-				$iDelay = 0.01;
-			} else {  # delay for the default time
-				$gDelayedVolChanges{$client}++;   # increment the delayed vol change count
+				my $char1 = substr($volAdjust,0,1);
+				my $getVolFromPlayer = 0;
+
+				#if it's an incremental adjustment, get the new volume from the client
+				if (($char1 eq '-') || ($char1 eq '+')) {
+					my $zone = $curAvrZone{$client};
+					if ($curVolume{$client,$zone} < 0) {
+						$volAdjust += abs($curVolume{$client,$zone});  # compensate for LMS setting volume to 0 after mute
+						handleVolSet( $client, $volAdjust, 1);  # set client volume
+					}
+					else {
+						$getVolFromPlayer = 1;  # wait until we actually process the volume change
+					}
+				}
+
+				# kill any volume changes that may be going on within the timer
+				$timersRemoved = Slim::Utils::Timers::killTimers( $client, \&handleVolChanges);
+
+				# Kill outstanding mute requests
+				Slim::Utils::Timers::killTimers( $client, \&handleMutingToggle);
+				my $lastVolChange = Time::HiRes::time() - $gLastVolChange{$client};
+				my $iDelay = .25;  # set default volume change delay time
+				if ( $lastVolChange > 2 || ($lastVolChange > $iDelay  && $gDelayedVolChanges{$client} > 3)) {
+					# near-immediate vol change if it's been more than the default delay time and changes are backed up (or 2 secs otherwise)
+					$iDelay = 0.01;
+				} else {  # delay for the default time
+					$gDelayedVolChanges{$client}++;   # increment the delayed vol change count
+				}
+				Slim::Utils::Timers::setTimer( $client, (Time::HiRes::time() + $iDelay ), \&handleVolChanges, $volAdjust, $getVolFromPlayer);
 			}
-			Slim::Utils::Timers::setTimer( $client, (Time::HiRes::time() + $iDelay ), \&handleVolChanges, $volAdjust, $getVolFromPlayer);
 		}
 	} elsif ( $request->isCommand([['mixer'], ['muting']]) && $outputLevelFixed{$client}) {
 		if ( !$iPowerOnInProgress{$client} && $curAvrSource{$client} ne "") {
@@ -2526,9 +2527,14 @@ sub handleMutingToggle {
 sub handleVolSet {
 	my $client = shift;
 	my $newVol = shift;
+	my $noCallback = shift;
 
 	$log->debug("VolChange: $newVol \n");
-	$client->execute([('mixer', 'volume', $newVol)]);
+	my $request = $client->execute([('mixer', 'volume', $newVol)]);
+	if ($noCallback) {
+		# Add a result so we can detect our own volume adjustments, to prevent a feedback loop
+		$request->addResult('denonavpcontrolInitiated', 1);
+	}
 }
 
 # ----------------------------------------------------------------------------
@@ -2849,8 +2855,7 @@ sub handleInputQuery {
 		my $force;
 		my $quickSelect = $cprefs->get('quickSelect');
 		my $inputSource = length($cprefs->get('inputSource'));
-		if ( $avrInput eq $avrQSInput{$client} || (!$quickSelect && !$inputSource) ) {
-			# only power off if it's the input for the associated player or if none was specified
+		if ( $avrInput eq $avrQSInput{$client} ) {  # only power off if it's the input for the associated player
 			$force = 1;
 			$log->debug("Handling primary zone Power OFF \n");
 		} else {
@@ -2987,9 +2992,7 @@ sub updateSqueezeVol { #used to sync SB vol with AVP
 			my $volAdjust = calculateSBVolume($client, $avpVol);
 
 			if ($zone == $prefZone) {  # only if the primary zone
-				my $request = $client->execute([('mixer', 'volume', $volAdjust)]);
-				# Add a result so we can detect our own volume adjustments, to prevent a feedback loop
-				$request->addResult('denonavpcontrolInitiated', 1);
+				handleVolSet( $client, $volAdjust, 1);  # set client volume
 			}
 		}
 	}
