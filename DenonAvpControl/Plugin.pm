@@ -173,6 +173,8 @@
 #					   Add an option to automatically pause the player when the AVR Zone associated with it is switched to another input.
 #	2025/11/03 V5.4.3 - Go back to leaving the AVR on when the player is turned off and no QS or Input Source has been specified.
 #					   Prevent volume from being set to 100% when the player is turned off, due to WiiM firmware (mis)behavior. 
+#	2025/12/16 V5.4.4 - Allow subwoofer level adjustment in Audio Settings for Pure and Pure Direct modes.
+#					   Clean up some Audio Settings icons and reduce the size of the main Settings icon to better match others in Lyrion menus.
 
 #	----------------------------------------------------------------------
 #
@@ -1837,39 +1839,39 @@ sub avpChannels {
 			};
 		};  # center channel
 
-		if ($surroundMode{$client} > 1 ) {  # ignore the subwoofer channel for PURE/DIRECT
-			if ($avp == 1) {
-				$parm = 'CVSW1';
-			} else {
-				$parm = 'CVSW';
-			}
-			$level = getChannelLevel($client,$parm);
+		# subwoofer channel
+		if ($avp == 1) {
+			$parm = 'CVSW1';
+		} else {
+			$parm = 'CVSW';
+		}
+		$level = getChannelLevel($client,$parm);
 
 
-			push @menu, {
-				text => $client->string('PLUGIN_DENONAVPCONTROL_'.$parm) . "  [".$level."dB]",
-				nextWindow => 'refresh',
-			};
-			push @menu, {
-				slider => 1,
-				min 	=> -12 + 0,
-				max		=> 12,
-				adjust 	=> 1,
-				initial	=> $level,
-				sliderIcons => '',
-				nextWindow => 'refresh',
-				actions	=> {
-					do  => {
-						player => 0,
-						cmd    => [ 'avpSetChannels', $parm ],
-						params => {
-							valtag => 'value',
-						},
+		push @menu, {
+			text => $client->string('PLUGIN_DENONAVPCONTROL_'.$parm) . "  [".$level."dB]",
+			nextWindow => 'refresh',
+		};
+		push @menu, {
+			slider => 1,
+			min 	=> -12 + 0,
+			max		=> 12,
+			adjust 	=> 1,
+			initial	=> $level,
+			sliderIcons => '',
+			nextWindow => 'refresh',
+			actions	=> {
+				do  => {
+					player => 0,
+					cmd    => [ 'avpSetChannels', $parm ],
+					params => {
+						valtag => 'value',
 					},
 				},
-			};
+			},
 		};
 
+		# surround channels
 		if ($surroundMode{$client} > 2 ) {  # ignore the remaining channels for PURE/DIRECT	and STEREO
 			if ($speakers > 0) {
 				$parm = 'CVSL';
@@ -2081,7 +2083,7 @@ sub avpChannels {
 					},
 				};
 			}
-		}
+		}  # surround channels
 	}  # if zone == 0
 
 	my $numitems = scalar(@menu);
