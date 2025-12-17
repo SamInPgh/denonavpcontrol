@@ -1,15 +1,15 @@
 <?xml version='1.0' standalone='yes'?>
 <extensions>
   <plugins>
-    <plugin maxTarget="*" version="5.4.3" minTarget="7.7" name="DenonAvpControl">
-      <link>https://github.com/SamInPgh/denonavpcontrol</link>
-      <url>https://github.com/SamInPgh/denonavpcontrol/releases/download/5.4.3/DenonAvpControl.zip</url>
+    <plugin minTarget="7.7" name="DenonAvpControl" version="5.4.4" maxTarget="*">
       <title lang="EN">Denon/Marantz AVR Control</title>
-      <creator>Chris Couper, Sam Yahres</creator>
-      <email>syahres@gmail.com</email>
+      <url>https://github.com/SamInPgh/denonavpcontrol/releases/download/5.4.4/DenonAvpControl.zip</url>
       <desc lang="EN">This plugin allows a network-ready Denon or Marantz AVR connected to an LMS player to be controlled from any Lyrion client app via telnet. In addition to automatically turning the AVR on and off and changing/muting the volume, other AVR settings can be adjusted using a set of client menus.</desc>
-      <sha>3eabbfbf01f4612b6eaaa2af752647a6cc6d6c67</sha>
       <category>hardware</category>
+      <sha>cf8e277f582357ddcc23ac779dde05a27447355b</sha>
+      <email>syahres@gmail.com</email>
+      <creator>Chris Couper, Sam Yahres</creator>
+      <link>https://github.com/SamInPgh/denonavpcontrol</link>
     </plugin>
   </plugins>
 </extensions>
