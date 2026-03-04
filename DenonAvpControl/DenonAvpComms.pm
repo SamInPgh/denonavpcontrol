@@ -2,7 +2,7 @@
 #
 #	Author:	Chris Couper <chris(dot)c(dot)couper(at)gmail(dot)com>
 #
-#	Copyright (c) 2008-2025 Chris Couper
+#	Copyright (c) 2008-2026 Chris Couper
 #	All rights reserved.
 #
 #	----------------------------------------------------------------------
@@ -796,14 +796,16 @@ sub SendNetAvpGetInputs {  # get the input strings from the AVR
 		$inputs{$url,4} = "NET|Network";
 		$classPlugin->updateInputTable($client);
 	} elsif ($avrType == 4) {  # Newer streaming amps) - Hardcoded for now
-		$inputs{$url,0} = 7;
+		$inputs{$url,0} = 9;
 		$inputs{$url,1} = "OPTICAL1|Optical";
 		$inputs{$url,2} = "COAXIAL|Coaxial";
 		$inputs{$url,3} = "LINE|Line";
 		$inputs{$url,4} = "HDMIARC|HDMI/ARC";
 		$inputs{$url,5} = "ANALOG1|Line";
 		$inputs{$url,6} = "ANALOGCD|CD";
-		$inputs{$url,7} = "NET|Network";		
+		$inputs{$url,7} = "NET|Network";	
+		$inputs{$url,8} = "SERVER|Music Server";
+		$inputs{$url,9} = "IRADIO|Internet Radio";
 		$classPlugin->updateInputTable($client);
 	} else {
 		$inactiveInputs{$url,0} = 0;  # initialize the inactive input table

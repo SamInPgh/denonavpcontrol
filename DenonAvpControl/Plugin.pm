@@ -4,7 +4,7 @@
 #	Credit To: Felix Mueller <felix(dot)mueller(at)gwendesign(dot)com>
 #	Credit To: Sam Yahres <syahres(at)gmail(dot)com>
 #
-#	Copyright (c) 2003-2008 GWENDESIGN, 2008-2025 Chris Couper
+#	Copyright (c) 2003-2008 GWENDESIGN, 2008-2026 Chris Couper
 #	All rights reserved.
 #
 #	----------------------------------------------------------------------
@@ -175,6 +175,7 @@
 #					   Prevent volume from being set to 100% when the player is turned off, due to WiiM firmware (mis)behavior. 
 #	2025/12/16 V5.4.4 - Allow subwoofer level adjustment in Audio Settings for Pure and Pure Direct modes.
 #					   Clean up some Audio Settings icons and reduce the size of the main Settings icon to better match others in Lyrion menus.
+#	2026/3/4 V5.4.5 -  Add support for Denon CEOL Piccolo streamer and hopefully other CEOL devices. (Thanks to user Herwen1980!).
 
 #	----------------------------------------------------------------------
 #
