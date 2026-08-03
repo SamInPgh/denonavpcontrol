@@ -172,10 +172,12 @@
 #					   Don't turn the AVR off from prefSetCallback() when changes are made for a powered off player.
 #					   Add an option to automatically pause the player when the AVR Zone associated with it is switched to another input.
 #	2025/11/03 V5.4.3 - Go back to leaving the AVR on when the player is turned off and no QS or Input Source has been specified.
-#					   Prevent volume from being set to 100% when the player is turned off, due to WiiM firmware (mis)behavior. 
+#					   Prevent volume from being set to 100% when the player is turned off, due to WiiM firmware (mis)behavior.
 #	2025/12/16 V5.4.4 - Allow subwoofer level adjustment in Audio Settings for Pure and Pure Direct modes.
 #					   Clean up some Audio Settings icons and reduce the size of the main Settings icon to better match others in Lyrion menus.
 #	2026/3/4 V5.4.5 -  Add support for Denon CEOL Piccolo streamer and hopefully other CEOL devices. (Thanks to user Herwen1980!).
+#	2026/7/25 V5.4.6 - Don't turn a player off during plugin registration if power syncing is in effect. (Thanks to user nzilberberg!).
+#					   Fix possible timing issue when populating AVR Input table. Improve power sync/polling logic.
 
 #	----------------------------------------------------------------------
 #
@@ -412,6 +414,7 @@ sub newPlayerCheck {
 	my $clientid = $client->id;
 
 	$log->debug( "Plugin enabled for: " . $client->name() . "\n");
+	$log->debug( "Power is: " . ($client->power() ? "ON" : "OFF") . "\n");
 	$log->debug( "Quick Select: " . $quickSelect . "\n");
 	$log->debug( "Zone: " . $zone . "\n");
 	$log->debug( "Speakers: " . $gSpeakers . "\n");
@@ -452,7 +455,7 @@ sub newPlayerCheck {
 	$curAvrSource{$client} = "";
 	$iPowerOnInProgress{$client} = 0;
 	$iPowerOffInProgress{$client} = 0;
-	$iPowerState{$client,$zone} = 0;
+	$iPowerState{$client,$zone} = $client->power();
 	$iInputSyncInProgress{$client} = 0;
 	$iInitialAvpVol{$client} = calculateAvrVolume($client, 25);
 
@@ -472,7 +475,7 @@ sub newPlayerCheck {
 
 	}
 
-	if ($client->power()) {    # turn the player off if currently on, to avoid confusion
+	if ($client->power() && !$cprefs->get('pref_PowerSynch')) {   # turn the player off if it is on and not syncing power
 		$log->debug("Turning " . $client->name() . " off to sync with plugin\n");
 		$iPowerState{$client,$zone} = 0;
 		my $request = $client->execute([('power', 0)]);
@@ -550,6 +553,7 @@ sub getDisplayName {
 
 # ----------------------------------------------------------------------------
 sub shutdownPlugin {
+	$log->debug( "*** DenonAvpControl:Shutting down" . "\n");
 	Slim::Control::Request::unsubscribe(\&newPlayerCheck);
 	clearCallback();
 }
@@ -2397,7 +2401,7 @@ sub commandCallback {
 	} elsif ( $request->isCommand([['mixer'], ['volume']]) && $outputLevelFixed{$client} ) {
 		if ( !$iPowerOnInProgress{$client} ) {
 			my $volAdjust = $request->getParam('_newvalue');
-			
+
 			# special case to catch player firmware bug that sets vol to 100 when output level is fixed
 			if ( $volAdjust == 100) {
 				$log->debug("*** DenonAvpControl:Volume set to 100% for " . $client->name() . " : changing to initial value\n");
@@ -2682,19 +2686,21 @@ sub syncPowerState {
 	my $powerPoll = int($cprefs->get('powerPoll'));
 
 	$log->debug("Checking Power ON/OFF status return \n");
-	if ($avrPower != $iPowerState{$client,$zone} ) {  #sync power if necessary
+	if ($avrPower != $iPowerState{$client,$zone} ||
+			($avrPower == 1 && $curAvrSource{$client} eq "") ) {  #sync power if necessary
 		if ($iPowerOnInProgress{$client} == 1 ) {   # ignore the request if startup is in progress
 			$log->debug("Power on in progress: ignoring player sync On/Off request \n");
 		} else {
-			$log->debug("Turning player " . $player . ($avrPower ? " ON" : " OFF") . " to sync with AVR\n");
 			$iPowerState{$client,$zone} = $avrPower;
 			$iPaused{$client} = 0;
 
 			if ($avrPower == 1) {  # sync the volume if needed
+				$log->debug("Syncing volume and input of player " . $player . " with AVR\n");
 				$iPowerOnInProgress{$client} = 1;
 				Slim::Utils::Timers::killTimers( $client, \&handleVolumeRequest);
 				Slim::Utils::Timers::setTimer( $client, (Time::HiRes::time() + 0.5), \&handleVolumeRequest );
 			} else {   # power it off
+				$log->debug("Turning player " . $player . " OFF" . " to sync with AVR\n");
 				my $request = $client->execute([('power', 0)]);
 				# Add a result so we can detect this event and prevent a feedback loop
 				$request->addResult('denonavpcontrolInitiated', 1);
@@ -3063,7 +3069,7 @@ sub getAvpModelInfo {  # populate the AVR model info
 		$log->debug("Getting AVR model string for device: " . $avpIPAddress);
 		Plugins::DenonAvpControl::DenonAvpComms::SendNetAvpGetModelInfo($client, $avpIPAddress);
 	}
-	elsif (!$gInputTablePopulated{$avpIPAddress} ) {  # populate the input table from the AVR
+	else {  # populate the input table from the AVR
 		Slim::Utils::Timers::setTimer( $client, (Time::HiRes::time() + 0.5 ), \&getAvpInputTable);
 	}
 }
@@ -3077,7 +3083,8 @@ sub getAvpInputTable {  # populate the AVR input table
 	my $quickSelect = $cprefs->get('quickSelect');
 	my $inputSource = $quickSelect ? "" : $cprefs->get('inputSource');
 
-	if ($audioEnabled || length($inputSource)) {  # skip if we don't need the table
+	if (($audioEnabled || length($inputSource)) &&
+			!$gInputTablePopulated{$avpIPAddress} ) {  # skip if we don't need the table
 		$log->debug("Getting AVR input table for device: " . $avpIPAddress);
 		Plugins::DenonAvpControl::DenonAvpComms::SendNetAvpGetInputs($client, $avpIPAddress);
 	}
